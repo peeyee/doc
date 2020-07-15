@@ -1,0 +1,81 @@
+1.服务管理
+centos6 采用 service和chconfig管理服务
+centos7 采用systemctl 管理服务，但是还可以使用service和chkconfig命令
+下面以sshd服务为实例
+
+sysvinit命令							systemd命令	备注
+service sshd start/stop/restart/status	systemctl start/stop/restart/status sshd	服务的开始/停止/重启/状态
+service sshd reload						systemctl reload sshd	重启读取配置文件（不停掉服务）
+chkconfig sshd on/off					systemctl enable/disable sshd	服务开机自启/不开机自启
+chkconfig --list						systemtcl list-unit-files	查看所有服务开机自启动或者禁止情况
+chkconfig --list sshd					systemctl is-enabled sshd	查看单个服务是否开机自启
+chkconfig --add sshd				    systemctl daemon-reload	修改服务文件（不是配置文件）后，重新加载服务
+
+centos7查看系统开机时间占用（优化开机）
+systemd-analyze time
+systemd-analyze blame
+
+注：时间同步：centos6使用ntp，centos7使用chrony（以可以使用ntp）ntpq -p 或者 chronyc sources
+防火墙 ：centos使用iptables ，centos7使用firewall
+
+2.网络管理
+2.1 网卡名
+centos6网卡名是eth0，centos7网卡名，接口名称被自动基于固件，拓扑结构和位置信息来确定，现在即使添加或移除网络设备，接口名称仍然保持固定，而无需重新枚举，和坏掉的硬件可以无缝替换。
+可以在centos7的 /etc/default/grub 的GRUB_CMDLINE_LINUX的双引号内添加“net.ifnames=0 biosdevname=0”grub2-mkconfig -o /etc/grub2.cfg,再把网卡配置文件/etc/sysconfig/network-scripts/ifcfg-xxx修改后，重启即可。
+
+2.2 网络配置命令
+在CentOS 6中的ifconfig，在CentOS 7中被ip命令取代了（不过现在ifconfig和ip都可以使用）；
+图形化网络配置工具nmtui取代了setup。
+
+2.3 网络服务
+centos6使用/etc/init.d/network服务，centos7新增加了NetworkManager服务，network仍然作为备用使用
+
+==============================================================
+
+3.主机名等系统文件
+3.1 主机名
+centos 6 的配置文件为/etc/sysconfig/network（永久设置）
+
+centos7的配置文件为/etc/hostname（永久设置）
+
+centos7还可以使用命令永久设置，hostnamectl set-hostname centos7 # hostnamectl是新增的主机名管理工具
+centos6和7，都可以使用hostname临时设置主机名，如hostname centos （重启后失效）
+3.2 查看系统版本
+redhat系列的（centos）都可以使用cat /etc/redhat-release
+
+
+centos7还可以cat /etc/os-release #支持所有systemd系统的统一发行版本名称和版本号文件,测试ubuntu16和18都可以使用这样参看
+
+注：还可以使用cat /proc/version查看系统版本
+3.3 登录提示语
+cat /etc/issue #很多生产环境会清空此文件
+
+
+3.4 字符集
+centos7的/etc/locale.conf 替换了centos6的/etc/sysconfig/i18n
+
+
+centos7还可以使用字符集管理工具localectl设置，localectl set-locale LANG=zh_CN.UTF-8 #localectl是新增的字符集管理工具
+3.5 时区设置
+centos6 在/etc/sysconfig/clock centos7没有此配置文件 ，可以使用timedatectl来设置
+
+timedatectl set-timezone Asia/Shanghai
+
+3.6 grub(GRand Unified Bootloader)
+centos6 使用grub， centos7使用grub2
+配置文件的名称改变了。在grub中，配置文件为grub.conf或menu.lst(grub.conf的一个软链接)，在grub2中改名为grub.cfg。
+3.7 内核
+centos6的内核版本是2.6.X ， centos7的内核版本是3.10.x,使用uname -r查看
+内核配置文件 /etc/sysctl.conf和/etc/sysctl.d/*.conf
+
+3.8 文件系统
+centos的文件系统默认是ext4（Fourth EXtended filesystem），centos7的文件系统默认是xfs
+xfs是扩展性高、高性能的文件系统。可通过工具xfsdump和xfsrestore来备份和恢复xfs文件系统，
+ext3 支持的最大 16TB 文件系统和最大 2TB 文件
+ext4 分别支持1EB（1,048,576TB， 1EB=1024PB， 1PB=1024TB）的文件系统，以及 16TB (4K block size)的文件。ext3 目前只支持 32,000个子目录，而 ext4 支持无限数量的子目录。
+xfs是一个64位文件系统，最大支持8EB减1字节的单个文件系统，实际部署时取决于宿主操作系统的最大块限制。对于一个32位Linux系统，文件和文件系统的大小会被限制在16TB。
+可以使用blkid /dev/sda1 查看文件系统
+
+3.9 文件结构变化
+centos6的/bin, /sbin, /lib, and /lib64在/下
+centos7的/bin, /sbin, /lib, and /lib64移到/usr下

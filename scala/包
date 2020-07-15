@@ -1,0 +1,6 @@
+1. import
+import packagename.xxx.Class
+
+2 使用_
+_ 代表any
+import util._代表导入包下所有文件

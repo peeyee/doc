@@ -1,0 +1,43 @@
+1.
+
+2.
+
+TASK [tispark : create spark_env.sh file] ***********************************************************************************************fatal: [172.16.8.36]: FAILED! => changed=false 
+  msg: 'AnsibleUndefinedVariable: ''dict object'' has no attribute ''spark_master'''
+fatal: [172.16.8.37]: FAILED! => changed=false 
+  msg: 'AnsibleUndefinedVariable: ''dict object'' has no attribute ''spark_master'''
+        to retry, use: --limit @/home/tidb/tidb-ansible/retry_files/deploy.retry
+
+
+
+[172.16.8.40]: Ansible Failed! ==>
+  changed=false 
+  msg: You don't mount the file system of /data with ext4 nodelalloc option.
+
+
+
+fatal: [172.16.8.36]: FAILED! => changed=true 
+  cmd: which numactl
+  delta: '0:00:00.376843'
+  end: '2020-03-25 14:58:39.340525'
+  msg: non-zero return code
+  rc: 1
+  start: '2020-03-25 14:58:38.963682'
+  stderr: 'which: no numactl in (/usr/local/bin:/usr/bin:/opt/spark-2.4.5-bin-hadoop2.7//bin:/opt/spark-2.4.5-bin-hadoop2.7//sbin)'
+  stderr_lines:
+  - 'which: no numactl in (/usr/local/bin:/usr/bin:/opt/spark-2.4.5-bin-hadoop2.7//bin:/opt/spark-2.4.5-bin-hadoop2.7//sbin)'
+  stdout: ''
+  stdout_lines: <omitted>
+...ignoring
+fatal: [172.16.8.37]: FAILED! => changed=true 
+  cmd: which numactl
+  delta: '0:00:00.370289'
+  end: '2020-03-25 14:58:39.388871'
+  msg: non-zero return code
+  rc: 1
+  start: '2020-03-25 14:58:39.018582'
+  stderr: 'which: no numactl in (/usr/local/bin:/usr/bin)'
+  stderr_lines:
+  - 'which: no numactl in (/usr/local/bin:/usr/bin)'
+  stdout: ''
+  stdout_lines: <omitted>

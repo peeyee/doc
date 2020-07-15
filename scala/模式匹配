@@ -1,0 +1,6 @@
+1.syntax
+color match {
+case a => ...
+case b => ...
+case _ => xxx // _代表除上述a，b之外的匹配
+}

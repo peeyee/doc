@@ -1,0 +1,22 @@
+
+1.
+ [WARNING]: Could not match supplied host pattern, ignoring: pd_servers_followers
+
+ [WARNING]: Could not match supplied host pattern, ignoring: pd_servers_leader
+
+
+2.
+fatal: [172.16.8.36]: FAILED! => changed=true 
+  cmd: which numactl
+  delta: '0:00:00.398594'
+  end: '2020-03-31 17:28:54.090063'
+  msg: non-zero return code
+  rc: 1
+  start: '2020-03-31 17:28:53.691469'
+  stderr: 'which: no numactl in (/usr/local/bin:/usr/bin:/opt/spark-2.4.5-bin-hadoop2.7//bin:/opt/spark-2.4.5-bin-hadoop2.7//sbin)'
+  stderr_lines:
+  - 'which: no numactl in (/usr/local/bin:/usr/bin:/opt/spark-2.4.5-bin-hadoop2.7//bin:/opt/spark-2.4.5-bin-hadoop2.7//sbin)'
+  stdout: ''
+  stdout_lines: <omitted>
+...ignoring
+

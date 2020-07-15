@@ -1,0 +1,12 @@
+笔者维护的Docker版本为1.13.1,，在对其版本升级到18.06.1之后，启动旧版本创建的容器时遇到这个错误：
+
+[root@template-centos7 /data]#docker start mysql33
+Error response from daemon: Unknown runtime specified docker-runc
+Error: failed to start containers: mysql33
+解决过程
+在查阅资料后，得知因为「当您从不兼容的版本升级docker并且升级后无法启动docker容器时会出现这种情况」，解决办法如下：
+
+[root@template-centos7 /root]#grep -rl 'docker-runc' /var/lib/docker/containers/ | xargs sed -i 's/docker-runc/runc/g'
+[root@template-centos7 /root]#systemctl stop docker
+[root@template-centos7 /root]#systemctl start docker
+改完之后重启dokcer，容器就可以启动了。

@@ -1,0 +1,19 @@
+1. trait
+特征，类比于java的接口。指的是一段代码，一项能力。特征不能被实例化。
+
+
+==和java 接口的区别====
+scala的trait可以包含属性，非抽象方法。
+特征更多的是用于代码重用，而非标准设计。而在java中，接口是一种标准设计的作用。
+trait Concrete {
+ def f(n: Int){ n * 31 }
+ val pi = 3.1415
+}
+
+2.第一个特征可以用extends 关键字
+如 
+class A extends traitB with traitC
+
+3. 特征可以继承特征
+trait A extends TraitB
+

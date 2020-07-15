@@ -1,0 +1,14 @@
+1.git  clone https://gitee.com/mirrors/Superset.git
+
+2. docker-compose up -d
+
+
+===superset=====
+ 特性总结
+*图表丰富，有数十种。
+*权限粒度细。
+
+缺点
+*部署复杂，运维难度高。
+*开发复杂，需要配置表，字段等。
+

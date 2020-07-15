@@ -1,0 +1,14 @@
+1. tidb监控
+http://172.16.8.36:3000/
+admin/pinming
+
+2. spark集群
+http://172.16.8.36:8080/
+
+3. haproxy负载均衡
+http://172.16.8.36:8180/haproxy 
+admin/pinming
+
+4.tidb
+ha 端口 3390
+root/kaifa#pm

@@ -1,0 +1,13 @@
+在多版本python的pip的安装与对应包的安装
+最近花了好长时间在搞这个，由于Deepin下python有两个版本，并且都没有安装pip，之前的博文默认安装pip给python2.7，结果各种问题，在此将之前走过的弯路整合起来：
+
+首先，安装pip
+
+下载get-pip.py，将这个py文件放到对应的python版本去执行就会安装到对应的版本文件夹中
+
+在使用的时候，如果多版本共存的话，用pip2、pip3命令去辨识，分别安装到不同的版本
+
+ 
+
+sudo pip2 install sth
+sudo pip3 install sth

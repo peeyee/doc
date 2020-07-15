@@ -1,0 +1,42 @@
+1.语法
+class name {
+。。。
+}
+
+1.1 设置类构造参数
+
+class name(args: Int,...){
+}
+在类体中的代码将被执行，也即常规的构造。
+通过this方法，可以设置辅助构造器
+this(){
+}
+
+1.2 设置默认值
+
+
+class name(args: Int=1,y: Int){
+}
+//args具有默认值1
+
+
+2. 方法
+
+ def method1(args: Type*): returnType = { some code here....}
+
+2.1 重载 overload
+同名方法而具有不同参数，比较方便代码编写和理解。
+def method1(args: Int): returnType = { some code here....}
+def method1(args: Double): returnType = { some code here....}
+
+2.2 重写
+
+override def method1...
+通常是子类重写父类方法而达到不同作用的目的。
+
+
+
+3. 抽象类
+abstract class namexxx
+抽象类与java一致，不能被实例化。至少有一个抽象方法。
+

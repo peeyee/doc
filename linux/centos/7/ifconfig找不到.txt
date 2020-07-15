@@ -1,0 +1,5 @@
+1.ifconfig 命令不存在
+
+这种情况就是我们现在面对的，因为centos7.2的mini版没有安装这个东东，所以我们就直接安装就好了，在终端里面输入：
+
+yum -y install net-tools

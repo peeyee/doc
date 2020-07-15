@@ -1,0 +1,23 @@
+1.拉取代码
+git clone https://gitee.com/mirrors/redash.git
+
+
+2. 开发环境docker部署
+docker-compose up -d
+
+
+
+
+
+
+
+
+
+9. 特性总结
+* 开源免费，licence BSD-2-Clause。
+* 文档丰富，https://redash.io/help。
+* 社区活跃，github 15.7k star,287 contributor,基本半年左右一个版本。
+* 图表比metabase丰富，有桑吉图，词云。
+* 网上案例用redash比superset多。
+
+

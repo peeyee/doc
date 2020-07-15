@@ -1,0 +1,98 @@
+1. 环境准备
+   centos7.3以上，中控机连外网。规划好节点的拓扑。
+   3PD, 2 TIDB, 3TIKV。
+   
+   生产环境
+	组件	CPU		内存	硬盘类型	网络	实例数量(最低要求)
+	TiDB	16核+	32 GB+	SAS	万兆网卡（2块最佳）	2
+	TiKV	16核+	32 GB+	SSD	万兆网卡（2块最佳）	3
+	PD	    4核+	8 GB+	SSD	万兆网卡（2块最佳）	3
+	监控	8核+	16 GB+	SAS	千兆网卡			1
+
+2.安装系统依赖包
+	yum -y install epel-release git curl sshpass && \
+	yum -y install python2-pip
+
+3.配置tidb用户
+
+	3.1 创建用户
+	useradd -m -d /home/tidb tidb
+	echo tidb|passwd --stdin tidb
+
+	3.2 添加sudo权限
+	visudo
+	tidb ALL=(ALL) NOPASSWD: ALL
+
+	3.3 配置ssh互信
+	ssh-keygen -t rsa  -f ~/.ssh/id_rsa -P ""
+	ssh--id tidb@172.16.8.41 --所有的机器都配一边
+
+	umount /alidata/ &&\
+	mkdir /data &&\
+	mount /dev/vdb1 /data &&\
+	sed -i 's/alidata/data/' /etc/fstab
+
+
+4. 下载并安装ansible
+
+	4.1 $tag为对应的版本号
+	git clone -b $tag https://github.com/pingcap/tidb-ansible.git
+
+	4.2 安装ansible
+	cd /home/tidb/tidb-ansible && \
+	sudo pip install -r ./requirements.txt
+	
+	4.3 验证Ansible 的版本。
+	ansible --version
+	ansible 2.7.11
+	
+5.创建ext4格式的数据盘
+	挂载时添加 nodelalloc 和 noatime 挂载参数。nodelalloc 是必选参数，否则 Ansible 安装时检测无法通过；noatime 是可选建议参数。
+
+	注意：
+	如果你的数据盘已经格式化成 ext4 并挂载了磁盘，可先执行 umount /dev/nvme0n1p1 命令卸载，从编辑 /etc/fstab 文件步骤开始执行，添加挂载参数重新挂载即可。
+
+	以 /dev/nvme0n1 数据盘为例，具体操作步骤如下：
+
+	5.1 查看数据盘。
+	fdisk -l
+	Disk /dev/nvme0n1: 1000 GB
+	
+	5.2创建分区表。
+	parted -s -a optimal /dev/nvme0n1 mklabel gpt -- mkpart primary ext4 1 -1
+	注意：
+	使用 lsblk 命令查看分区的设备号：对于 nvme 磁盘，生成的分区设备号一般为 nvme0n1p1；对于普通磁盘（例如 /dev/sdb），生成的的分区设备号一般为 sdb1。
+
+	5.3格式化文件系统。
+	mkfs.ext4 /dev/nvme0n1p1
+
+	5.4查看数据盘分区 UUID。
+	本例中 nvme0n1p1 的 UUID 为 c51eb23b-195c-4061-92a9-3fad812cc12f。
+
+
+	lsblk -f
+	NAME    FSTYPE LABEL UUID                                 MOUNTPOINT
+	sda
+	├─sda1  ext4         237b634b-a565-477b-8371-6dff0c41f5ab /boot
+	├─sda2  swap         f414c5c0-f823-4bb1-8fdf-e531173a72ed
+	└─sda3  ext4         547909c1-398d-4696-94c6-03e43e317b60 /
+	sr0
+	nvme0n1
+	└─nvme0n1p1 ext4         c51eb23b-195c-4061-92a9-3fad812cc12f
+	
+	5.5编辑 /etc/fstab 文件，添加 nodelalloc 挂载参数
+	vi /etc/fstab
+	UUID=c51eb23b-195c-4061-92a9-3fad812cc12f /data1 ext4 defaults,nodelalloc,noatime 0 2
+	挂载数据盘。
+
+	mkdir /data1 && \
+	mount -a
+	执行以下命令，如果文件系统为 ext4，并且挂载参数中包含 nodelalloc，则表示已生效。
+
+	mount -t ext4
+	/dev/nvme0n1p1 on /data1 type ext4 (rw,noatime,nodelalloc,data=ordered)
+	
+
+剩余步骤见
+
+https://pingcap.com/docs-cn/stable/how-to/deploy/orchestrated/ansible/

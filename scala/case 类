@@ -1,0 +1,5 @@
+1. 类似于javade pojo
+
+
+2. 构造
+case类会自动创造包含apply方法的伴随对象。可以使用 name(args)的方法初始化对象。
