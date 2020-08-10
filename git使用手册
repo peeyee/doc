@@ -1,0 +1,22 @@
+1.设置默认的文本编辑器
+git config --global core.editor "\"/usr/bin/vi\""
+
+# 中文乱码设置
+
+git config --global core.quotepath false   core.quotepath设为false的话，就不会对0x80以上的字符进行quote。中文显示正常。
+
+git config --global gui.encoding utf-8  图形界面编码
+
+git config --global i18n.commit.encoding utf-8  提交信息编码
+
+git config --global i18n.logoutputencoding utf-8  输出 log 编码
+
+1git status
+查看当前分支工作区的情况，包括与远程分支的差异情况。
+git status
+位于分支 数据仓库
+您的分支与上游分支 'origin/数据仓库' 一致。
+
+无文件要提交，干净的工作区
+
+
