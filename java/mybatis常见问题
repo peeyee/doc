@@ -1,0 +1,9 @@
+1.org.apache.ibatis.reflection.ReflectionException: There is no getter for property named ‘createTime’ in ‘class java.lang.String’
+mybatis要求entity类的属性与数据库字段的名称保持一致。所有先排除下xml文件的配置是否正确。两者不一致的，可以配置映射文件。并在select语句中引用
+resultMap.
+
+    <resultMap id="dataQualityRulesEntityResultMap" type="org.pinming.entity.DataQualityRulesEntity">
+
+        <result property="ruleId" column="rule_id"/>
+				...
+    </resultMap>
