@@ -1,0 +1,4 @@
+1.设置root密码
+/usr/bin/mysqladmin -u root password 'new-password'
+2. 设置root访问权限
+grant all on *.* to 'root'@'%' identified by 'root';

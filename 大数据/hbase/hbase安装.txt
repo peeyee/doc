@@ -1,0 +1,80 @@
+1.下载软件
+	选择stable版本的，清华镜像站点。
+wget -c https://mirrors.tuna.tsinghua.edu.cn/apache/hbase/stable/hbase-1.4.12-bin.tar.gz --no-check-certificate
+
+tar -xzvf hbase-1.4.12-bin.tar.gz -C /opt
+
+
+2.创建用户
+useradd hbase
+echo hbase|passwd hbase --stdin
+chown -R hbase:hbase /opt/hbase-1.4.12/
+mv /opt/hbase-1.4.12/ /opt/hbase
+
+添加HDFS的权限
+#groupadd supergroup
+#groupmems -g supergroup -a hbase
+
+
+
+2.1 配置SSH免密
+
+ssh-keygen -f ~/.ssh/id_rsa -t rsa -P ''
+ssh-copy-id localhost
+
+3.配置相关文件
+3.1 java_home
+vi .bash_profile
+export JAVA_HOME=/usr/local/src/jdk1.8
+export HBASE_HOME=/opt/hbase
+export PATH=$HBASE_HOME/bin:$PATH
+source .bash_profile
+
+3.2 hbase-env.sh
+vi hbase-env.sh
+export JAVA_HOME=/usr/local/src/jdk1.8
+
+
+3.3 hbase-site.xml
+
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://oracle-11g:9000/hbase</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/home/hbase/zookeeper</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.stream.capability.enforce</name>
+    <value>false</value>
+    <description>
+      Controls whether HBase will check for stream capabilities (hflush/hsync).
+
+      Disable this if you intend to run on LocalFileSystem, denoted by a rootdir
+      with the 'file://' scheme, but be mindful of the NOTE below.
+
+      WARNING: Setting this to false blinds you to potential data loss and
+      inconsistent system state in the event of process and/or node failures. If
+      HBase is complaining of an inability to use hsync or hflush it's most
+      likely not a false positive.
+    </description>
+  </property>
+  <property>
+	<name>hbase.master.info.port</name>
+	<value>60010</value>
+  </property>
+</configuration>
+
+其中hbase.rootdir，指的是hbase的hdfs目录
+
+4.启动hbase
+start-hbase.sh [stop-hbase.sh]
+
+使用jps可以看到hmaster进程说明已经正常启动。
+4406 HRegionServer
+4267 HQuorumPeer
+4334 HMaster
+
+在伪分布式，分布式模式下，输入 host:16010，可以查看WebUI

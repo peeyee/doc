@@ -1,0 +1,7 @@
+1.windoow-perefence-java-codestyle-formatter
+点击新建一个方案，在braces TAB页中设置。
+
+
+2.设置括号的颜色
+window -> preferences -> java（or c++）-> editor -> matching brackets highight
+, color改为红色

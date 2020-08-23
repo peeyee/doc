@@ -1,0 +1,1 @@
+在Window系统中有个Hosts文件（没有后缀名），在Windows98系统下该文件在Windows目录，在Windows2000/XP系统中位于C:\Winnt\System32\Drivers\Etc 目录中。WIN7(C:\Windows\System32\drivers\etc)

@@ -1,0 +1,20 @@
+通过配置文件启动Docker,修改/etc/docker/daemon.json 文件并添加上 registry-mirrors 键值。
+
+sudo vim /etc/docker/daemon.json
+
+{
+ "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+也可选用网易的镜像地址：http://hub-mirror.c.163.com
+{
+"registry-mirrors": ["http://hub-mirror.c.163.com"]
+}
+
+修改保存后，重启 Docker 以使配置生效。
+
+sudo service docker restart
+
+作者：superLiS
+链接：https://www.jianshu.com/p/84b6fe281b4d
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

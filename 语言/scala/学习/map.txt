@@ -1,0 +1,9 @@
+==map
+键值对元素的组合。
+
+val amap = Map[Int, String](1 -> "a");
+
+API
+
+1. +=
+可变map添加元素的方法。

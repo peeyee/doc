@@ -1,0 +1,6 @@
+1.read 读取键盘输入
+read: usage: read [-ers] [-a array] [-d delim] [-i text] [-n nchars] [-N nchars] [-p prompt] [-t timeout] [-u fd] [name ...]
+read variable_name
+read -p "please say something\n" variable_name
+-p: 提示信息
+-t: 等待输入的超时时间

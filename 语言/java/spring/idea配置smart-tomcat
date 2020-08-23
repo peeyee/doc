@@ -1,0 +1,6 @@
+1.配置smart-tomcat
+
+1.1 在本地安装好tomcat，配置好catalina_home
+1.2 在settings-tomcat sever里配置好，tomcat的相关路径。
+1.3 在run-editconfiguration里，填写好相关参数，其中deployment directory设置为项目的根目录/webapp,如果没有则新建此目录。
+其他默认即可。context会自动识别并填写，一般是项目名称。

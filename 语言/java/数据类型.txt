@@ -1,0 +1,28 @@
+1. char
+单个字符
+char c='a';
+char c='汉';
+char c='\u0041';
+c++;
+
+2.包裹类型
+boolean  Boolean
+char	 Character
+int		 Integer
+double	 Double
+		 String
+		 
+JAVA函数调用只有值传递。
+
+
+3.ArrayList
+容器类
+
+4.set
+
+
+5.HashSet
+元素唯一
+
+6.HashMap
+键值对形式的list，键唯一。
