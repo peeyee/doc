@@ -1,0 +1,13 @@
+在HTable类中，实现了批量操作数据的方法。
+1.批量操作
+void batch(final List<? extends Row> actions, final Object[] results)
+--入参操作数组，和接受返回接口的results数组
+
+2.批量get
+Result[] get(List<Get> gets)
+
+3.批量put
+void put(final List<Put> puts)
+
+4.批量delete
+void delete(final List<Delete> deletes)

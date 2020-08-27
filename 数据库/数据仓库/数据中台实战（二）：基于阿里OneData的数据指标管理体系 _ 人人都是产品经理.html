@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)http://www.woshipm.com/data-analysis/2428698.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>数据中台实战（二）：基于阿里OneData的数据指标管理体系 | 人人都是产品经理</title>
+    <!--[if lt IE 9]>
+    <script src="http://www.woshipm.com/wp-content/themes/Kan/js/html5.js"></script>
+    <![endif]-->
+    <meta name="keywords" content="2年, 中级, 数据中台, 数据指标体系, "><meta name="description" content="本文将通过具体案例来介绍OneData的实施流程，继而介绍阿里OneData数据体系中数据指标的管理和数据模型的设计，最后再为大家讲数据看板的设计。 上一篇文章讲了《数据中台实战（一）：以B2B点电商为例谈谈产品经理下的数据埋点》，本文我们先以一个例子实战介绍"><link type="image/vnd.microsoft.icon" href="http://image.woshipm.com/favicon.ico" rel="shortcut icon"><link rel="dns-prefetch" href="http://image.woshipm.com/">
+<link rel="stylesheet" id="misc-css" href="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/misc.css" type="text/css" media="screen">
+<style id="misc-inline-css" type="text/css">
+
+    .back2top{
+        display:flex;
+        justify-content:center;
+    }
+                .surface-content.header-fix{
+                    padding-top:60px;
+                }
+
+                .chartTabs {
+                    display:flex;
+                }
+
+                .chartTabs li{
+                    width:auto;
+                    flex: 1 1 auto;
+                }
+                
+                .surface-content.header-fix .metabar{
+                    position:fixed;
+                    top:0;
+                    left:0;
+                    right:0;
+                }
+                pre {
+                    font-family: monospace,monospace;
+    font-size: 1em;
+    background-color: #eee;
+    padding: 20px;
+    word-break: break-all;
+    border-radius: 5px;
+    margin-bottom: 15px;
+                }
+
+                .postlist-item .post-title a:hover {
+    background: linear-gradient(90deg,#00aeff,#3369e7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    text-shadow: none;
+}
+.event-list{
+    padding-top: 40px;
+}
+.event-item {
+    width: 380px;
+    margin-bottom: 30px;
+}
+.event-item .img {
+    height: auto;
+}
+
+.event-item .meta .event-status {
+    top: 13px;
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+                
+</style>
+<link rel="stylesheet" id="vondor-css" href="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/app.min.css" type="text/css" media="screen">
+<link rel="stylesheet" id="fa-css" href="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/font-awesome.min.css" type="text/css" media="screen">
+<script type="text/javascript" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/jquery-1.12.4.min.js.下载"></script>
+<link rel="canonical" href="http://www.woshipm.com/data-analysis/2428698.html">
+<script type="text/javascript">var algolia = {"debug":false,"application_id":"4OCSFS3SIM","search_api_key":"7bd75daaf81d0299565fce2232394dfd","powered_by_enabled":true,"query":"","autocomplete":{"sources":[],"input_selector":"input[name='s']:not('.no-autocomplete')"},"indices":{"searchable_posts":{"name":"w_searchable_posts","id":"searchable_posts","enabled":true,"replicas":[]}}};</script></head>
+<body class="single u-backgroundColorLightBlue">
+<div class="surface-content header-fix">
+    <div class="metabar metabar--shadow u-clearfix">
+        <div class="container">
+            <div class="u-floatLeft">
+                <a href="http://www.woshipm.com/" class="logo-xmas">
+                    <img class="logo" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/logo.png">
+                </a>
+            </div>
+            <div class="content u-floatLeft">
+                <nav class="header-nav"><ul id="menu-%e9%a1%b6%e9%83%a8%e5%af%bc%e8%88%aa" class="subnav-ul layoutSingleColumn layoutSingleColumn--wide"><li id="menu-item-155938" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-155938"><a href="http://www.woshipm.com/">首页</a></li>
+<li id="menu-item-155939" class="third menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-155939"><a href="http://www.woshipm.com/data-analysis/2428698.html#">分类浏览</a><svg width="14" height="14" viewBox="0 0 19 19" class="svgIcon"><path d="M3.9 6.77l5.2 5.76.43.47.43-.47 5.15-5.7-.85-.77-4.73 5.25L4.75 6z" fill-rule="evenodd"></path></svg><ul class="sub-menu">	<li id="menu-item-155928" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155928"><a href="http://www.woshipm.com/category/pmd">产品经理</a></li>
+	<li id="menu-item-155929" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155929"><a href="http://www.woshipm.com/category/pd">产品设计</a></li>
+	<li id="menu-item-155927" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155927"><a href="http://www.woshipm.com/category/ucd">交互体验</a></li>
+	<li id="menu-item-155930" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155930"><a href="http://www.woshipm.com/category/operate">产品运营</a></li>
+	<li id="menu-item-155932" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155932"><a href="http://www.woshipm.com/category/rp">原型设计</a></li>
+	<li id="menu-item-191466" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-191466"><a href="http://www.woshipm.com/category/evaluating">分析评测</a></li>
+	<li id="menu-item-155926" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155926"><a href="http://www.woshipm.com/category/it">业界动态</a></li>
+	<li id="menu-item-155936" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-155936"><a href="http://www.woshipm.com/category/zhichang">职场攻略</a></li>
+	<li id="menu-item-184121" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-184121"><a href="http://www.woshipm.com/category/chuangye">创业学院</a></li>
+	<li id="menu-item-1016325" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1016325"><a href="http://www.woshipm.com/category/marketing">营销推广</a></li>
+	<li id="menu-item-906383" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-906383"><a href="http://www.woshipm.com/category/ai">人工智能</a></li>
+	<li id="menu-item-906382" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-906382"><a href="http://www.woshipm.com/category/blockchain">区块链</a></li>
+</ul>
+</li>
+<li id="menu-item-155940" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-155940"><a target="_blank" href="https://www.qidianla.com/?channel=woshipm">BAT大师课</a></li>
+<li id="menu-item-420537" class="vip menu-item menu-item-type-custom menu-item-object-custom menu-item-420537"><a href="http://www.woshipm.com/categroy/active">活动讲座</a></li>
+<li id="menu-item-279085" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-279085"><a target="_blank" href="http://wen.woshipm.com/">问答</a></li>
+<li id="menu-item-395532" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-395532"><a target="_blank" href="http://996.pm/7b1Zr">会员</a></li>
+<li id="menu-item-500728" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-500728"><a href="http://www.woshipm.com/data-analysis/2428698.html#">百宝箱</a><svg width="14" height="14" viewBox="0 0 19 19" class="svgIcon"><path d="M3.9 6.77l5.2 5.76.43.47.43-.47 5.15-5.7-.85-.77-4.73 5.25L4.75 6z" fill-rule="evenodd"></path></svg><ul class="sub-menu">	<li id="menu-item-395530" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-395530"><a target="_blank" href="http://dh.woshipm.com/">网址导航</a></li>
+	<li id="menu-item-590029" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-590029"><a target="_blank" href="http://www.woshipm.com/topics">知识体系</a></li>
+	<li id="menu-item-500729" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-500729"><a target="_blank" href="http://www.woshipm.com/tools">必备工具</a></li>
+	<li id="menu-item-852376" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-852376"><a target="_blank" href="https://www.yunyingpai.com/board">全网热搜</a></li>
+	<li id="menu-item-1019313" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1019313"><a target="_blank" href="https://www.yunyingpai.com/download">资料下载</a></li>
+	<li id="menu-item-501017" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-501017"><a target="_blank" href="http://www.yunyingpai.com/">运营派</a></li>
+	<li id="menu-item-1317021" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1317021"><a target="_blank" href="https://t.qidianla.com/">学员空间</a></li>
+	<li id="menu-item-500731" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-500731"><a target="_blank" href="https://www.apptu.cn/">裂变海报</a></li>
+	<li id="menu-item-155941" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-155941"><a target="_blank" href="http://www.woshipm.com/books">书单</a></li>
+</ul>
+</li>
+</ul></nav>
+            </div>
+            <div class="u-floatRight content">
+                                    <span class="item" data-action="popLogin"><svg class="svgIcon-use" width="18" height="17" viewBox="0 0 18 17"><path d="M17.831,3.950 L9.184,12.519 C9.113,12.590 9.024,12.641 8.927,12.667 L4.754,13.785 C4.705,13.798 4.655,13.805 4.603,13.805 C4.450,13.805 4.301,13.743 4.193,13.635 C4.047,13.489 3.992,13.275 4.048,13.078 L5.219,8.984 C5.246,8.891 5.296,8.805 5.366,8.736 L14.013,0.165 C14.122,0.058 14.267,-0.002 14.421,-0.002 C14.575,-0.002 14.720,0.058 14.829,0.165 L17.831,3.141 C17.940,3.249 18.000,3.393 18.000,3.545 C18.000,3.698 17.940,3.842 17.831,3.950 ZM8.156,11.689 L6.199,9.750 L5.436,12.419 L8.156,11.689 ZM14.421,1.378 L6.902,8.830 L9.088,10.997 L16.607,3.546 L14.421,1.378 ZM1.153,2.286 L1.153,14.895 C1.153,15.425 1.588,15.855 2.122,15.855 L14.732,15.855 C15.267,15.855 15.701,15.425 15.701,14.895 L15.701,10.476 L16.855,10.476 L16.855,14.895 C16.855,16.055 15.902,16.998 14.732,16.998 L2.122,16.998 C0.952,16.998 -0.000,16.055 -0.000,14.895 L-0.000,2.286 C-0.000,1.126 0.952,0.183 2.122,0.183 L9.326,0.183 L9.326,1.326 L2.122,1.326 C1.588,1.326 1.153,1.756 1.153,2.286 Z"></path></svg>投稿</span>
+                    <span class="item show-search"><svg class="svgIcon-use" width="16" height="16" viewBox="0 0 16 16"><path d="M15.800,14.481 L12.519,11.200 C12.504,11.184 12.487,11.170 12.471,11.156 C13.361,9.988 13.890,8.529 13.890,6.947 C13.890,3.110 10.780,-0.000 6.945,-0.000 C3.109,-0.000 -0.000,3.110 -0.000,6.947 C-0.000,10.785 3.109,13.895 6.945,13.895 C8.529,13.895 9.990,13.364 11.159,12.471 C11.172,12.487 11.186,12.503 11.201,12.518 L14.483,15.800 C14.786,16.104 15.329,16.056 15.693,15.692 C16.056,15.328 16.104,14.786 15.800,14.481 L15.800,14.481 ZM0.772,6.947 C0.772,3.537 3.535,0.771 6.945,0.771 C10.354,0.771 13.118,3.537 13.118,6.947 C13.118,8.621 12.453,10.138 11.373,11.250 C11.351,11.269 11.330,11.288 11.310,11.308 C11.289,11.329 11.269,11.351 11.250,11.373 C10.138,12.456 8.619,13.123 6.945,13.123 C3.535,13.123 0.772,10.358 0.772,6.947 L0.772,6.947 Z" class="cls-1"></path></svg>搜索</span>
+                    <div class="item app-qrcode"><svg class="svgIcon-use" width="12" height="18" viewBox="0 0 12 18"><path d="M10.599,17.999 L1.401,17.999 C0.626,17.999 -0.000,17.381 -0.000,16.616 L-0.000,1.382 C-0.000,0.617 0.626,-0.001 1.401,-0.001 L10.599,-0.001 C11.374,-0.001 12.000,0.627 12.000,1.382 L12.000,16.616 C12.000,17.381 11.374,17.999 10.599,17.999 ZM11.066,1.382 C11.066,1.128 10.857,0.922 10.599,0.922 L1.401,0.922 C1.142,0.922 0.934,1.128 0.934,1.382 L0.934,12.800 L11.066,12.800 L11.066,1.382 ZM11.066,13.811 L0.934,13.811 L0.934,16.626 C0.934,16.881 1.142,17.087 1.401,17.087 L10.599,17.087 C10.857,17.087 11.066,16.881 11.066,16.626 L11.066,13.811 ZM6.000,16.283 C5.483,16.283 5.066,15.871 5.066,15.361 C5.066,14.851 5.483,14.439 6.000,14.439 C6.516,14.439 6.934,14.851 6.934,15.361 C6.934,15.871 6.516,16.283 6.000,16.283 Z"></path></svg>APP<div class="app-qrcode-dropdown"><img class="app-qrcode-img" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/footer-appdownload.png"></div></div>
+                    <span class="item" data-action="popLogin">注册 | 登录</span>
+                                            </div>
+        </div>
+    </div>
+    <div class="search-overlay">
+        <div class="container search-content">
+            <form class="search-form" action="http://www.woshipm.com/search-posts" target="_blank" method="get">
+                <input type="search" class="search-form-input" name="k" placeholder="请输入搜索关键词">
+                <button class="btn-search">
+                    <i class="fa fa-search"></i>
+                </button>            </form>
+            <div class="search-hot-words">
+                <h3 class="search-overlay-title"><svg class="svgIcon-use u-colorYellow" width="16" height="16" viewBox="0 0 20 22">
+                        <path d="M19.595,15.561 C18.224,19.972 14.151,21.765 10.797,21.972 C9.858,22.028 8.916,22.002 7.981,21.894 C3.718,21.402 -0.382,18.446 0.029,13.748 C0.223,11.528 1.519,8.904 2.466,6.987 L2.620,6.672 C2.756,6.400 3.029,6.236 3.319,6.254 C3.609,6.268 3.865,6.462 3.972,6.747 C4.106,7.109 4.318,7.534 4.543,7.984 C4.629,8.156 4.715,8.330 4.800,8.504 C6.731,6.456 7.296,3.554 7.602,0.687 C7.631,0.425 7.783,0.197 8.007,0.081 C8.233,-0.035 8.498,-0.026 8.716,0.107 C10.922,1.463 12.480,2.863 13.616,4.513 C13.922,4.959 14.199,5.426 14.445,5.913 C14.621,5.327 14.811,4.747 15.016,4.172 C15.110,3.928 15.312,3.749 15.555,3.695 C15.798,3.640 16.051,3.718 16.229,3.901 C20.136,7.930 20.484,12.700 19.595,15.561 ZM7.493,12.523 C7.493,12.149 7.202,11.847 6.844,11.847 C6.486,11.847 6.196,12.149 6.196,12.523 L6.196,13.784 L4.857,13.804 L4.857,12.559 C4.857,12.186 4.566,11.884 4.209,11.884 C3.851,11.884 3.560,12.186 3.560,12.559 L3.560,16.704 C3.560,17.077 3.851,17.379 4.209,17.379 C4.566,17.379 4.857,17.077 4.857,16.704 L4.857,15.156 L6.196,15.135 L6.196,16.667 C6.196,17.040 6.486,17.343 6.844,17.343 C7.202,17.343 7.493,17.040 7.493,16.667 L7.493,12.523 ZM10.632,11.813 C9.385,11.813 8.371,13.034 8.371,14.535 C8.371,16.036 9.386,17.258 10.632,17.258 C11.878,17.258 12.892,16.036 12.892,14.535 C12.892,13.034 11.878,11.813 10.632,11.813 ZM16.522,11.959 L13.574,11.959 C13.216,11.959 12.926,12.262 12.926,12.635 C12.927,12.816 12.996,12.988 13.118,13.115 C13.239,13.242 13.403,13.312 13.574,13.311 L14.399,13.311 L14.399,16.629 C14.399,17.002 14.690,17.304 15.048,17.304 C15.406,17.304 15.696,17.002 15.696,16.629 L15.696,13.311 L16.522,13.311 C16.692,13.312 16.856,13.242 16.978,13.115 C17.100,12.988 17.169,12.816 17.170,12.635 C17.170,12.262 16.880,11.959 16.522,11.959 ZM10.632,15.908 C10.109,15.908 9.669,15.279 9.669,14.535 C9.669,13.791 10.109,13.163 10.632,13.163 C11.153,13.163 11.595,13.791 11.595,14.535 C11.595,15.279 11.154,15.908 10.632,15.908 Z" class="cls-1"></path>
+                    </svg>热搜词</h3>
+                <div class="words-list">
+                    <a href="http://www.woshipm.com/tag/app" target="_blank" class="words-item">app</a><a href="http://www.woshipm.com/tag/o2o" target="_blank" class="words-item">O2O</a><a href="http://www.woshipm.com/tag/prd" target="_blank" class="words-item">PRD</a><a href="http://www.woshipm.com/tag/%e4%ba%92%e8%81%94%e7%bd%91%e9%87%91%e8%9e%8d" target="_blank" class="words-item">互联网金融</a><a href="http://www.woshipm.com/tag/%e4%ba%a4%e4%ba%92%e8%ae%be%e8%ae%a1" target="_blank" class="words-item">交互设计</a><a href="http://www.woshipm.com/tag/rp" target="_blank" class="words-item">原型设计</a><a href="http://www.woshipm.com/tag/%e5%95%86%e4%b8%9a%e6%a8%a1%e5%bc%8f" target="_blank" class="words-item">商业模式</a><a href="http://www.woshipm.com/tag/%e6%95%b0%e6%8d%ae%e5%88%86%e6%9e%90" target="_blank" class="words-item">数据分析</a><a href="http://www.woshipm.com/tag/ue" target="_blank" class="words-item">用户体验</a><a href="http://www.woshipm.com/tag/%e7%ab%9e%e5%93%81%e5%88%86%e6%9e%90" target="_blank" class="words-item">竞品分析</a><a href="http://www.woshipm.com/tag/%e8%bf%90%e8%90%a5" target="_blank" class="words-item">运营</a><a href="http://www.woshipm.com/tag/%e9%9c%80%e6%b1%82%e5%88%86%e6%9e%90" target="_blank" class="words-item">需求分析</a>                </div>
+            </div>
+            <div class="search-features">
+                <h3 class="search-overlay-title"><svg class="svgIcon-use  u-colorPink" width="16" height="16" viewBox="0 0 22 22">
+                        <path d="M21.988,7.680 C21.978,7.317 21.969,6.921 21.963,6.490 C21.954,6.060 21.951,5.617 21.951,5.169 C21.932,4.117 21.917,2.952 21.898,1.674 C21.865,1.468 21.825,1.259 21.782,1.053 C21.739,0.847 21.631,0.647 21.459,0.457 C21.287,0.284 21.093,0.168 20.875,0.106 C20.660,0.045 20.466,0.017 20.294,0.017 L12.428,0.017 C12.394,-0.001 12.271,-0.005 12.065,0.005 C11.860,0.014 11.730,0.035 11.678,0.069 C11.574,0.103 11.457,0.165 11.328,0.251 C11.199,0.337 11.091,0.423 11.005,0.509 L0.576,10.993 C-0.183,11.891 -0.192,12.754 0.551,13.581 L8.568,21.631 C8.740,21.770 8.925,21.868 9.125,21.929 C9.324,21.991 9.527,22.012 9.733,21.994 C9.939,21.976 10.136,21.932 10.314,21.865 C10.495,21.797 10.646,21.702 10.765,21.579 C12.698,19.646 14.422,17.912 15.940,16.375 L17.855,14.433 C18.494,13.812 19.059,13.249 19.551,12.751 C20.042,12.250 20.445,11.845 20.755,11.534 L21.247,11.042 C21.281,11.009 21.336,10.935 21.416,10.821 C21.493,10.710 21.576,10.563 21.662,10.381 C21.748,10.200 21.825,9.997 21.895,9.773 C21.963,9.549 22.000,9.306 22.000,9.047 L22.000,8.583 C22.000,8.344 21.994,8.042 21.988,7.680 L21.988,7.680 L21.988,7.680 ZM8.479,14.845 L7.013,14.845 L7.290,12.908 L8.756,12.908 L8.479,14.845 L8.479,14.845 L8.479,14.845 ZM9.232,12.327 C9.161,12.376 9.084,12.413 9.001,12.438 C8.918,12.462 8.836,12.475 8.756,12.475 L7.188,12.475 L7.188,11.331 L8.037,11.331 L8.037,10.271 L7.087,10.317 L7.004,9.192 L8.037,9.137 L8.037,7.999 L6.967,7.999 L6.967,6.847 L8.037,6.847 L8.037,6.026 L9.465,6.026 L9.465,6.847 L10.452,6.847 L10.452,7.999 L9.465,7.999 L9.465,9.051 L10.406,9.005 L10.498,10.148 L9.466,10.203 L9.466,11.900 C9.466,11.992 9.444,12.075 9.401,12.146 C9.358,12.220 9.303,12.278 9.232,12.327 L9.232,12.327 L9.232,12.327 ZM9.742,14.845 L9.456,12.908 L10.931,12.908 L11.208,14.845 L9.742,14.845 L9.742,14.845 ZM12.041,14.845 L11.764,12.908 L13.230,12.908 L13.506,14.845 L12.041,14.845 L12.041,14.845 ZM13.860,12.115 C13.814,12.035 13.789,11.943 13.789,11.838 L13.789,8.009 L12.840,8.009 L12.757,9.281 L13.494,9.346 L13.384,10.489 L12.692,10.425 L12.600,11.937 C12.588,12.115 12.505,12.250 12.351,12.343 C12.197,12.435 12.041,12.481 11.881,12.481 L10.710,12.481 L10.609,11.340 L11.208,11.340 L11.272,10.299 L10.692,10.243 L10.802,9.091 L11.337,9.155 L11.411,8.012 L10.701,8.012 L10.701,6.859 L11.475,6.859 L11.530,6.011 L12.959,6.066 L12.904,6.859 L15.218,6.859 L15.218,11.353 L15.716,11.353 L15.716,12.487 L14.554,12.487 C14.462,12.487 14.370,12.472 14.281,12.444 C14.191,12.416 14.109,12.373 14.035,12.318 C13.961,12.263 13.906,12.195 13.860,12.115 L13.860,12.115 L13.860,12.115 ZM14.336,14.845 L14.060,12.908 L15.525,12.908 L15.802,14.845 L14.336,14.845 L14.336,14.845 L14.336,14.845 ZM19.373,4.830 C19.053,5.141 18.669,5.298 18.220,5.298 C17.772,5.298 17.390,5.141 17.080,4.830 C16.770,4.520 16.613,4.139 16.613,3.690 C16.613,3.241 16.770,2.860 17.080,2.550 C17.390,2.239 17.772,2.083 18.220,2.083 C18.669,2.083 19.053,2.239 19.373,2.550 C19.692,2.860 19.852,3.241 19.852,3.690 C19.852,4.139 19.692,4.520 19.373,4.830 L19.373,4.830 Z" class="cls-1">
+                    </path></svg>热门专题</h3>
+                                    <div class="search-feature-item">
+                        <a class="tool-img" href="http://www.woshipm.com/topic/program" target="_blank">
+                            <img rel="nofollow" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/180x120">
+                            <h3>小程序该如何设计和运营？</h3>
+                        </a>
+                    </div>
+                                    <div class="search-feature-item">
+                        <a class="tool-img" href="http://www.woshipm.com/topic/grow" target="_blank">
+                            <img rel="nofollow" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/180x120(1)">
+                            <h3>运营人的自我修养</h3>
+                        </a>
+                    </div>
+                                    <div class="search-feature-item">
+                        <a class="tool-img" href="http://www.woshipm.com/topic/promote" target="_blank">
+                            <img rel="nofollow" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/180x120(2)">
+                            <h3>运营人如何提高自身竞争力？</h3>
+                        </a>
+                    </div>
+                            </div>
+        </div>
+    </div>    <div class="container u-clearfix single-wrapper u-marginBottom30">
+        <div class="u-width840 u-floatLeft">
+            <div class="u-marginTop30">
+                <article class="article-wrapper u-backgroundColorWhite u-rounded">
+                    <header class="article-header">
+                        <h2 class="article-title">数据中台实战（二）：基于阿里OneData的数据指标管理体系</h2>
+                    </header>
+                    <div class="postMetaLockup--authorWithBio u-flex">
+                        <div class="u-flex0">
+                            <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/42x42" alt="" height="42" width="42" class="avatar"></a>
+                        </div>
+                        <div class="u-flex1 u-paddingLeft15 u-overflowHidden">
+                            <div class="">
+                                <a href="http://www.woshipm.com/u/199204" target="_blank">华仔                                        <span title="专栏作家"><svg style="vertical-align: -1px" class="svgIcon" height="12" viewBox="0 0 1024 1024" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m512 0c-282.624 0-512 229.376-512 512s229.376 512 512 512 512-229.376 512-512-229.376-512-512-512zm55.296 832-372.736-520.704 174.592-.512 198.656 313.856 141.824-313.856 112.64.512z"></path></svg></span>
+                                    </a><button class="button button--toggle button--primary button--follow" data-action="showLoginForm" data-id="199204"><span class="is-default">订阅专栏</span><span class="is-active">取消订阅</span></button>                            </div>
+                            <div class="des">公众号：改变世界的产品经理。</div>
+                            <div class="postMetaInline postMetaInlineSupplemental post-meta-items">
+                                <span class="post-meta-item"><svg class="svgIcon" viewBox="0 0 1024 1024"><path d="M471.849558 536.888853c-4.139274-7.299243-6.212492-15.446807-6.195096-23.608697l0-0.085958 0-239.811808c0-26.595728 21.311375-48.155766 48.018643-48.155766 26.51898 0 48.015573 21.533432 48.015573 48.155766l0 219.960691 105.002472 104.998379c18.675338 18.679431 18.7439 48.8905-0.137123 67.771523-18.753109 18.752086-49.238424 18.670222-67.771523 0.137123L481.341746 548.810371C477.585189 545.376155 474.374054 541.353538 471.849558 536.888853L471.849558 536.888853zM513.673106 897.481492c212.155934 0 384.145054-171.989119 384.145054-384.145054 0-212.160028-171.989119-384.148124-384.145054-384.148124-212.160028 0-384.148124 171.988096-384.148124 384.148124C129.524982 725.492372 301.513078 897.481492 513.673106 897.481492L513.673106 897.481492zM513.673106 897.481492"></path></svg>2019-06-06</span>
+                                <span class="post-meta-item"><svg class="svgIcon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="12" height="12"><path d="M509.618 415.795c-42.695 0-77.253 38.372-77.253 85.738 0 47.352 34.558 86.22 77.253 86.22 42.667 0 76.716-38.867 76.716-86.22 0-47.352-34.049-85.738-76.716-85.738z m1.9-177.9c-211.548 0-383.265 159.859-383.265 274.587 0 114.727 171.717 273.624 383.266 273.624 212.484 0 384.227-162.522 384.227-273.624 0-111.088-171.743-274.587-384.227-274.587z m-1.446 452.006c-89.7 0-162.134-81.71-162.134-181.903 0-101.157 72.435-182.397 162.134-182.397 90.183 0 163.1 81.241 163.1 182.397 0 100.206-72.917 181.903-163.1 181.903z"></path></svg>3.7万</span>
+                                <span class="post-meta-item"><button title="收藏" class="button button--chromeless button--toggle button-post-2428698" data-id="2428698" data-action="popLogin"><svg class="svgIcon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="12" height="12"><path d="M512.043 170.709l112.555 201.131 228.736 43.349-159.232 167.637 28.928 227.883-210.944-97.493-210.944 97.493 28.928-227.925-159.275-167.595 228.779-43.392 112.469-201.088z" p-id="2116"></path></svg><span class="count">117</span></button></span>
+                                <span class="post-meta-item"><button data-action="uplike" data-id="2428698" class="button button--toggle button--chromeless">
+<svg class="svgIcon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M617.359 839.488c-23.02 0-68.406-3.495-116.456-7.202-34.565-2.664-70.301-5.42-100.691-7.12l-1.453-0.236c-31.606-8.664-31.606-34.722-31.606-48.718V479.188c0-30.031 8.65-47.72 29.849-61.071 49.9-31.42 132.253-100.534 123.18-210.393-1.418-17.122 2.757-31.522 12.067-41.634 8.94-9.713 22.222-15.065 37.385-15.065 24.444 0 53.721 15.188 59.84 43.333 0.606 2.777 1.354 5.937 2.181 9.443 8.276 34.929 25.487 107.618-9.54 187.672-2.994 6.435-2.792 12.269 0.536 17.492 6.42 10.073 23.498 16.58 43.52 16.58 13.406 0 33.398-2.874 54.563-5.917 26.584-3.82 56.718-8.152 82.535-8.152 32.103 0 52.43 6.907 62.13 21.12 19.396 28.426 5.09 68.977-10.054 111.901-7.084 20.086-14.415 40.852-18.146 60.367-2.275 11.89-4.401 25.97-6.646 40.881-9.394 62.267-21.076 139.776-58.511 164.214-45.219 29.529-105.91 29.529-154.683 29.529z m-312.862-1.31h-66.082c-21.465 0-38.927-17.457-38.927-38.916V459.648c0-21.465 17.462-38.927 38.927-38.927h66.082c21.465 0 38.927 17.462 38.927 38.927v339.609c0 21.464-17.467 38.921-38.927 38.921z"></path></svg><span class="count">27</span>
+</button></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="article-topAd">
+                        <a href="http://996.pm/YB0Ky" target="_blank">不懂技术怎么做产品？15天在线学习，补齐产品经理必备技术知识，再也不被开发忽悠。了解一下&gt;</a>                    </div>
+                                            <div id="postAudio" class="jp-jplayer" style="width: 0px; height: 0px;"><img id="jp_poster_0" style="width: 0px; height: 0px; display: none;"><audio id="jp_audio_0" preload="none" src="http://audio-pm.woshipm.com/cache/vava-2428698.mp3"></audio></div>
+                        <div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+                            <div class="jp-type-single">
+                                <div class="jp-gui jp-interface">
+                                    <div class="jp-controls">
+                                        <button class="jp-play" role="button" tabindex="0"><svg class="svgIcon-use" width="25" height="25" viewBox="0 0 25 25"><path d="M7 4v17.03a.5.5 0 0 0 .795.404l11.1-8.111a1 1 0 0 0 0-1.615l-11.1-8.112A.5.5 0 0 0 7 4z"></path></svg></button>
+                                        <button class="jp-pause" role="button" tabindex="0" style="display: none;"><svg class="svgIcon-use" width="25" height="25" viewBox="0 0 25 25"><g transform="translate(5 4)" fill-rule="evenodd"><rect width="6" height="17" rx="2"></rect><rect x="9" width="6" height="17" rx="2"></rect></g></svg></button>
+                                    </div>
+                                    <div class="u-flex1">
+                                        <div>释放双眼，带上耳机，听听看~！</div>
+                                        <div class="u-flexCenter">
+                                            <div class="u-flex0 u-marginRight10 jp-current-time js-currentTime" style="width:34px">00:00</div>
+                                            <div class="u-flex1">
+                                                <div class="js-progress" data-action="seek-audioPlayer">
+                                                    <div class="js-progressBar">
+                                                        <div class="js-play-bar" style="width: 0%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="u-flex0 u-marginLeft10 jp-duration">00:00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                        <div class="grap">
+                        <blockquote><p>本文将通过具体案例来介绍OneData的实施流程，继而介绍阿里OneData数据体系中数据指标的管理和数据模型的设计，最后再为大家讲数据看板的设计。</p></blockquote>
+<p><img data-action="zoom" class="size-full wp-image-2429923 aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/Gcg4ZWR076AJ6YmX0QZ0.png" alt="" width="800" height="450"></p>
+<p>上一篇文章讲了<a href="http://www.woshipm.com/data-analysis/2333963.html">《数据中台实战（一）：以B2B点电商为例谈谈产品经理下的数据埋点》</a>，本文我们先以一个例子实战介绍OneData实施流程。接着再讲阿里OneData数据体系中数据指标的管理、数据模型的设计。最后讲一下数据产品中，数据看板的设计。全是实战干货，看完本文你就会知道数据中台最核心的内容。</p>
+<h2 class="nav-point" id="article_nav_0">阿里OneData实施过程实战</h2>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/xLBOD3TRYNRJGli1UcEy.png" alt="" width="979" height="549"></p>
+<p>比如当时我们运营提了一个比较有指导意义的数据指标叫爆款率，我们以爆款率为例先说一下OneData每个步骤实施的流程和涉及的角色。</p>
+<h3>第一步：要确定指标的业务口径</h3>
+<p>业务口径应该由数据中台的产品经理主导，找到提出该指标的运营负责人沟通。首先要问清楚指标是怎么定义的，比如运营说爆款率的定义分子是是专场中商品销售件数超过20件的商品数，分母是专场内的总商品数（专场如上图所示，商品会放在运营人员组的一个一个专场里面）。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/ap55RYdVAURad5tjnYRd.jpg" alt="" width="408" height="725"></p>
+<p>这里面有几个坑：</p>
+<p>1. 这个20件可能是运营拍脑袋定义的数据，这时要协调我们的数据数据分析师看下历史专场销售件数的分布找出最合理的值，然后和运营基于数据再一起定义最终的阈值。如果历史数据专场销售件数大部分都远远超过20件那么这个指标就所有的专场都是爆款专场，就没什么意义了。</p>
+<p>2. 商品的销售件数超过20件，其中有一个十分有争议的字眼那就是销售，怎么定义销售？是下单就算，还是支付才算？考虑不考虑退款？如果考虑退款是发起退款就算还是退款实际发生后再算？其实是有很多问题要考虑的。最终和运营确定为该专场支付后的商品件数除以专场商品的总件数。</p>
+<p>3. 销售的商品件数是按商品销售的件数还是按照商品下SKU的销售件数，这个是要搞清楚的，可能运营不关心这个事，但是影响到模型的设计。</p>
+<p>处理完这些坑后关于指标的定义还需要问这几个问题。我们统计的维度是什么？比如爆款率的计算维度是专场内商品的维度，一个是要专场内，一个是商品，原子指标就是销售款数。还有就是统计周期，一般统计周期分为按小时、按天（当天）、按业务周（运营自己定义的统计周期）、按自然周周、按自然月月、按年，还有就是截止到昨天也是比较常用。爆款率的统计周期是统计专场开始到结束时间内的销售件数。</p>
+<p><strong>接下来要问清楚这个指标有什么用，给谁用。</strong></p>
+<p>不是所有的指标都有开发的意义，因为后面你会发现我们数据中台前期每做一个指标都会花费大量的人力资源，<strong>所以一定要考虑这个指标的性价比，我们投入这么多资源，能够给公司带来什么，要么直接和交易额相关，要么就是能节省运营同事大量的工作时间，节省人力成本也是为公司省钱嘛。</strong></p>
+<p>比如我们的爆款率是给商品负责人看的，专场的商品是由商品运营人员组的，爆款率就决定这个运营人员的组货能力，组货能力强的商品运营一定是能够给公司带来更多的交易额。这样公司就应该多投入资源给那些爆款率比较高的那些运营人员。这样就很清楚了，我们的爆款率是给运营负责人和商品运营看的。</p>
+<p>另外我们的商品运营会长时间在市场选货，那我们团队决定把这个指标做成移动端可看，并且商品运营人员可以实时查看爆款率这个指标。</p>
+<h3>第二步：要确定指标的技术口径</h3>
+<p>技术口径是由建模工程师主导，此时数据中台产品经理要和模型设计师沟通整个指标的业务逻辑，另外就是要协调业务方的技术开发人员和我们的建模工程师一起梳理数据库层面需要用到表结构和字段。</p>
+<p><strong>一定要精确到字段级别，比如我们的爆款率涉及到专场表、商品表、订单表、涉及的字段有商品的销售款数（需要关联专场和商品表）、专场的总商品件数等字段。</strong></p>
+<p>这些字段都确定好后，就能初步定下来这个指标能不能统计，如果不能统计这时产品经理应该主动协调运营告知，并且还要告诉运营同事做了哪些功能才能统计这些指标，接下来就是协调业务方产品经理讨论是不是要做这些功能。</p>
+<h3>第三步：原型设计和评审</h3>
+<p>此时由数据中台产品经理主导设计原型，对于爆款率来说我们要一方面要展示他们的实时销售件数，另外一方面要实时展示爆款率的变化趋势，加上专场的转化率（支付人数/UV）就可以综合判断这个专场的质量，当运营人员发现转化率和爆款率比较低时再结合商品的数据及时把一些表现比较差劲的商品下架，让销量好的商品得到更多的曝光机会。</p>
+<p>原型的评审分为内部评审和外部评审。</p>
+<p>内部评审要拉上我们的架构师、建模工程师、数据开发工程师、后端开发工程师、前端开发工程师、UI，一起说明整个功能的价值和详细的操作流程，确保大家理解的一致。接下来就要和我们的运营根据原型最终确定问题。比较重要的功能要发邮件让我们的运营进一步确认，并同步给所有的运营同事保证大家的口径一致。</p>
+<h3>第四步：模型设计</h3>
+<p>此时主导的是我们的模型设计工程师，按照阿里的OneData建模理论的指导，模型设计工程师会采用三层建模的方式把数据更加科学的组织存储。分为 ODS（操作数据层），DWD(明细数据层)、DWS（汇总数据层）、ADS （应用数据层），这是业务对数据分层常用的模型。模型设计工程师要清楚的知道数据来源自那里，要怎么存放。</p>
+<p>关于数据建模下一篇文章会更加详细的介绍，在此就不再多说。</p>
+<h3>第五步：数据开发</h3>
+<p>此时主导的是大数据开发工程师，首先要和数据建模工程师沟通好技术口径明确好我们计算的指标都来自于那些业务系统，他们通过数据同步的工具如DataX、消息中间TimeTunnel将数据同步到模型工程师设计的ODS层，然后就是一层一层的通过SQL计算到DW*层，一层一层的汇总，最后形成可为应用直接服务的数据填充到ADS层。</p>
+<p>另外大数据开发工程另外一个比较重要的工作就是设置调度任务，简单来讲就是什么时候计算提前写好的计算脚本如T-1每天凌晨处理上一天的数据，随着业务的增长，运营会对实时数据的需求越来越大，还有一些实时计算任务的配置也是由大数据开发工程师完成。</p>
+<h3>第六步：后端开发</h3>
+<p>此时由后端开发主导，后端开发工程师基于产品经理的功能定义输出相应的接口给前端开发工程师调用，由于ADS层是由数据开发工程师已经将数据注入常规的关系型数据库（如MYSQL等），此时后端开发工程师更多的是和产品经理沟通产品的功能、性能方面的问题，以便给使用者更好的用户体验。</p>
+<h3>第七步：前端开发</h3>
+<p>此时主导的是前端开发工程师。原型出来后产品经理会让UI设计师基于产品功能的重点设计UI，UI设计师经过反复的设计，UI最终定型后，会给我们的前端开发工程师提供切图。前端开发工程师基于UI的切图做前端页面的开发。</p>
+<h3>第八步：联调</h3>
+<p>此时数据开发工程师、前端开发工程师、后端开发工程师都要参与进来。此时会要求大数据开发工程师基于历史的数据执行计算任务，数据开发工程师承担数据准确性的校验。前后端解决用户操作的相关BUG保证不出现低级的问题完成自测。</p>
+<h3>第九步：测试</h3>
+<p>测试工程师在完成原型评审后就要开始写测试用例，那些是开发人员自己要自测通过才能交上来测试的，那些是自己要再次验证的都在测试用例写清楚。此时有经验的产品经理会向运营人员要历史的统计数据来核对数据，不过运营人员的数据不一定准确，只是拿来参考。最终测试没问题产品经理协调运营人员试用，试用中发现的一些问题再回炉重新修改，此时整个研发过程就结束了。</p>
+<h3>第十步：上线</h3>
+<p>运维工程师会配合我们的前后端开发工程师更新最新的版本到服务器。此时产品经理要找到该指标的负责人长期跟进指标的准确性。重要的指标还要每过一个周期内部再次验证，从而保证数据的准确性。</p>
+<p>经历了以上步骤数据中台的一个指标终于开发完成，可以看得出一个小小的指标需要调动8个角色在一起沟通、确认好久才能完成上线。<strong>所以产品经理一定要把握好指标的价值，把有限的资源花费到最有价值的指标上去。</strong>下面介绍一下完成这些步骤最核心的数据指标的定义与数据模型的建立。</p>
+<h2 class="nav-point" id="article_nav_1">基于阿里OneData的数据指标管理体系</h2>
+<h3>数据指标的定义</h3>
+<p>我们在梳理公司的数据指标时发现每个部门对同一个指标定义的不一致，就好比交易额这个指标在电商产品中就是一个模糊的指标，是下单金额、还是支付金额（无包含优惠）、或者有效金额（剔除退款），这样没有一个统一的标准，就很难对部门间做横向的对比。</p>
+<p>甚至部门间对同一个指标的口径也存在不一样的情况，更不用说整个指标的开发要涉及运营同事、产品同事、技术同事等，只要一个环节出问题，指标计算就会不准确。我们也是采用阿里的一套针对指标的规范定义，让大家在一个标准下看数据消除歧义。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/ztlsTliY5Ms6004A7DhG.png" alt="" width="1280" height="720"></p>
+<p>其中的名词定义我们简单过一下：</p>
+<p><strong>数据域：</strong>面向业务的大模块，不会经常变。比如我们公司有环贸快版打版服务、亿订电商业务、供应链业务等等大的业务模块类似产品线。</p>
+<p><strong>业务过程：</strong>如电商业务中的下单、支付、退款等都属于业务过程。</p>
+<p><strong>时间周期：</strong>就是统计范围，如近30天、自然周、截止到当天等。</p>
+<p><strong>修饰类型：</strong>比较好理解的如电商中支付方式，终端类型等。</p>
+<p><strong>修饰词：</strong>除了维度意外的限定词，如电商支付中的微信支付、支付宝支付、网银支付等。终端类型为安卓、IOS等</p>
+<p><strong>原子指标：</strong>不可再拆分的指标如支付金额、支付件数等指标</p>
+<p><strong>维度：</strong>常见的维度有地理维度（国家、地区等）、时间维度（年、月、周、日等）</p>
+<p><strong>维度属性：</strong>如地理维度中的国家名称、ID、省份名称等。</p>
+<p><strong>派生指标：</strong>原子指标+修饰词+时间周期就组成了一个派生指标。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/sOHaYuob0TdtyegPDjJz.png" alt="" width="1040" height="553"></p>
+<p>阿里就是用这一套严格的指标拆分体系来管理每个指标。之所以拆这么彻底，就是要消除歧义。条件允许的话可以协调开发同事、测试同事、产品同事口述一下对这个指标的理解看看有什么不同。最大程度的消除指标的歧义。</p>
+<p><strong>关于数据指标还有two more thing要谈：</strong></p>
+<p><strong>1. 怎么分出指标的重要性。</strong>当你不是从0到1跟一个产品，那么此时你可能没你们的运营懂产品的各项数据，当你问你们运营问那些指标是比较重要的，因为他们所处的岗位不同，看事情的角度不同，最后你会发现得到一个结果：一大堆的指标，都重要。此时有个技巧，你可以问人事或者他们的部门负责人要一下部门的绩效考核指标，也许这些就是他们最重要的指标。另外这些指标你可以和部门的负责人沟通，那些是他比较关注的指标，那就应该从这些指标做起。</p>
+<p><strong>2. 关于虚荣指标。</strong>产品经理需要识别那些是虚荣指标，那些是更有用的指标。比如常见的PV、UV、月活、总用户数、总商品数等等都是虚荣指标，因为他无法直接促进交易额的增长。uv、月活再多有什么用，用户就是不购买。 比如电商行业的主路径的专户率，访问-商品列表、商品列表-商品详情、商品详情-加购、加购-下单转化率这些都是降低流失就能提高交易额的。还有用户的次日留存、7日留存率（新用户7日后是否再次访问）、30日留存率等能直接反应用户的质量和运营做的好坏。商品的动销率（销售款数/上架款数），能直接反映这批商品的好坏。总结一下一般能直接促进交易额、类似转换率这种带分子、分母的指标都是非虚荣指标。</p>
+<h2 class="nav-point" id="article_nav_2">基于阿里OneData的模型设计体系</h2>
+<p>首先你要知道这些概念。什么是数据仓库、数据仓库和数据库的区别、数据仓库的分层、数据模型的定义。</p>
+<h3><strong>什么是数据仓库</strong></h3>
+<p>我用个比喻解释这个概念。</p>
+<p>马云：做个报告，我要知道开年到现在还没进入工作状态的有哪些人。</p>
+<p>我：好的。</p>
+<p>我开始收集：上/下班打卡数据、门口探头统计上厕所频率的数据、手机wifi上网数据、微信群活跃数据、发出零食声音最恐怖的工位数据、有事没事熬电话粥的数据…一周之后，分析报告上我们部门主管的名字占据第一，他让我加了一周的班……</p>
+<p>我收集的这些数据我需要把它放在一个地方，我暂且把它放在一个叫“新年好”的文件夹，这些来自不同地方的数据，我需要做维度统一处理、字段命名规范处理、去噪处理（比喻年龄为100这种数据）等等。这是做一份报告，如果做一个平台或者一个项目呢？</p>
+<p>比如支付宝的年度账单；网易云音乐的年度报告；那区区一个新年好就应付不过来了，所以，需要一个储藏这些数据的数据库来替代上面的“新年好”，这个用来储存按照我们需要的、对我们有用的、已经清洗过、很规范的东西就是我们的数据仓库。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/bHt3nTVTtpUmxFv5vNxi.png" alt="" width="1190" height="484"></p>
+<h3>数据仓库与数据库的区别</h3>
+<p>数据库与数据仓库都用来储存数据，在本质上其实作用是相同的，当从业务出发，两者的区别就很大了。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/LLP9mjTQ6Y1SX4WLHSIf.png" alt="" width="630" height="415"></p>
+<h3>​数据仓库是层级分明的</h3>
+<p>既然要做数据处理，我们数据前后肯定有变化，那么为了保险，我们需要将各个维度的数据分层储存，比如一个订单数据，让我罗列我可以整出二、三十个字段，可是最后我们真正用到的只有：uid、time和goods id，这个过程需要不断的过滤。每过滤一层就需要在新的一层储存一次。业务是分层的参考标准，不同的业务，分层不一样，比如阿里的数据分层分为：ODS、DWD、DWS、ADS。</p>
+<p><strong>ODS(操作数据层)：</strong>是数据仓库第一层数据，直接从原始数据过来的，经过简单地处理，爆款率涉及到的表结构比如订单表、专场表、商品表、用户表等。</p>
+<p><strong>DW*（汇总数据层）</strong>：这个是数据仓库的第二层数据，DWD和DWS很多情况下是并列存在的，这一层储存经过处理后的标准数据。增加了维度形成了统计宽表，比如专场的爆款商品有哪些。</p>
+<p><strong>ADS（应用数据层）</strong>：这个是数据仓库的最后一层数据，为应用层数据，直接可以给业务人员使用。比如某日某个专场爆款率是多少、总的爆款率是什么。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/E75EKUz90At1cY92XhYU.png" alt="" width="873" height="598"></p>
+<p>看到这里，你也许会问，为什么要分层？</p>
+<p>在这篇文章里，过多解释这个原因，没有意义，这个阶段，你就记住，分层是为了更清晰的掌控、管理数据。了解了数据仓库的基本概念，我们就得实战啦，如基本的数据模型。</p>
+<p>数据模型有很多，如：范式模型、维度模型、Data Vault 等等。感兴趣的可以自行查阅资料，今天我们重点讲一下维度模型中的“星型模型”。</p>
+<h3>星型模型的基本概念</h3>
+<p>星型模型中有两个重要的概念：事实表和维度表。</p>
+<p>事实表：一些主键ID的集合，没有存放任何实际的内容。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/xH6xV5tTr7i0eOpYfwQL.png" alt="" width="953" height="716"></p>
+<p>上图是我自己画的一个星型模型表结构（仅辅助说明），如上图中的“报告表”就是一张事实表，这个报告表会随着用户的购买行为不断的优化和更新，每个ID对应维度表中一条记录。</p>
+<p><strong>维度表：</strong>存放详细的数据信息，有唯一的主键ID。如上面的商品表、用户表等等。</p>
+<p><strong>星型模型适用的业务场景：</strong></p>
+<ul>
+<li>电商网站：某宝、狗东等分析用户的买买买行为。</li>
+<li>新闻网站：虎嗅*、36kr*、推酷*等分析用户的阅读行为。</li>
+<li>写作网站：知乎*、简书等用户的创作回顾分析。</li>
+<li>……</li>
+</ul>
+<p><strong>星型模型的特点：</strong></p>
+<ul>
+<li>数据冗余小（因为很多具体的信息都存在相应的维度表中了，比如用户信息就只有一份）</li>
+<li>结构清晰（表结构一目了然）</li>
+<li>便于做OLAP分析（数据分析用起来会很开心）</li>
+<li>增加使用成本，比如查询时要关联多张表</li>
+</ul>
+<h2 class="nav-point" id="article_nav_3"><strong>数据看板的设计</strong></h2>
+<p>到现在为止指标已经定义好了，也采用三层建模的形式存储了下来。在这里就跳过数据开发这块，太过于偏技术化。指标计算好后最重要的就是指标的展示了，此时有个坑，你会发现每个人关注的数据不太一样，老板关注的和部门领导关注的是有差别的、部门领导关注的和一线的执行人员关注的还是有差别的，我们做了很多看板还是无法满足住全公司每个用户的数据看板需求。</p>
+<p>最后决定采用自定义看板的方案，我们数据中台提供的是看板库，所有的指标已经在数据中台分门别类的定义好，计算好。</p>
+<p>如果遇到新的数据指标，现在的看板库无法满足，数据中台会进行新一轮的开发，开发完成后将指标计算的结果放到看板库中。看数据的同事可以通过查看、搜素自己想要的指标，通过拖拉拽的方式形成自己的个性化看板，并能通过微信、小程序形成自己的每日看板报告。</p>
+<p>这样老板想看的指标数据中台自己定制页面，定制看板的权限交给每个同事，不过要注意权限的设定，有些同事是不能看到特别关键的指标。</p>
+<p>看数据人员选择自己想要的指标通过拖拉的方式定制自己的看板，可以选择显示方式如折线图、饼图、柱状图等常规图表，也可以选择统计周期等属性。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/ODVy5lkVivY1kT7UGKTI.png" alt="" width="1019" height="624"></p>
+<p>在此放一张配置后的数据看板DEMO， 左侧的看板都是看数据的同事自行配置的。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/44abiUezlHtEfqTJGXZZ.png" alt="" width="1861" height="723"></p>
+<p>定制完看板后可以对接微信、内部的小程序、APP等。进行数据指标的个性化推送。</p>
+<p><img data-action="zoom" class="aligncenter" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/QFyKWVqyQm6XC8Vo9RsX.png" alt="" width="1653" height="989"></p>
+<p><strong>接来下会讲数据中台产品设计、用户画像、个性化推荐模块。</strong></p>
+<h3>相关阅读：</h3>
+<p><a href="http://www.woshipm.com/data-analysis/2333963.html">《数据中台实战（一）：以B2B点电商为例谈谈产品经理下的数据埋点》</a></p>
+<p>&nbsp;</p>
+<p>作者：Wilton（董超华），曾任职科大讯飞，现任富力环球商品贸易港大数据产品经理。微信公众号：改变世界的产品经理。简单、简短、有用，坚持原创、坚持做感动你的好文章。</p>
+<p>本文由@华仔 原创发布于人人都是产品经理，未经许可，禁止转载。</p>
+<p>题图来自Unsplash, 基于CC0协议。</p>
+                    </div>
+                            <div class="article-bottomAd">
+            <a href="https://www.qidianla.com/course/yunying.html" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/147xQ3hMFWacblsCN6VR.jpg"></a>        </div>
+        <div class="taglist"><a href="http://www.woshipm.com/tag/2%e5%b9%b4" rel="tag">2年</a><a href="http://www.woshipm.com/tag/%e4%b8%ad%e7%ba%a7" rel="tag">中级</a><a href="http://www.woshipm.com/tag/%e6%95%b0%e6%8d%ae%e4%b8%ad%e5%8f%b0" rel="tag">数据中台</a><a href="http://www.woshipm.com/tag/%e6%95%b0%e6%8d%ae%e6%8c%87%e6%a0%87%e4%bd%93%e7%b3%bb" rel="tag">数据指标体系</a></div>        <div class="support-author"><div class="support-title">给作者打赏，鼓励TA抓紧创作！</div><button class="button--pay" data-post-id="2428698" data-author="199204" data-avatar="http://image.woshipm.com/wp-files/2018/12/E8E8uAnlg2IivnpwqcUP.jpg"><svg width="13" height="16" class="svgIcon--use" viewBox="0 0 13 16"><path d="M9.113,4.571 C9.951,3.771 10.895,2.742 10.685,2.057 C10.475,1.485 10.056,0.799 9.427,0.571 C8.903,0.342 8.379,0.456 7.750,0.799 C7.540,0.342 7.016,0.114 6.596,-0.001 C5.863,-0.001 5.234,0.228 4.814,0.914 C4.080,0.571 3.451,0.685 2.927,1.028 C2.613,1.256 2.298,1.713 2.298,2.628 C2.298,3.542 3.137,4.228 3.766,4.685 C2.508,5.599 -0.218,7.885 -0.008,12.228 C-0.218,15.656 2.613,15.999 2.613,15.999 L10.371,15.999 C11.314,15.885 12.991,14.971 12.991,12.571 L12.991,12.228 C13.201,7.771 10.371,5.371 9.113,4.571 L9.113,4.571 ZM8.932,11.835 L6.940,11.835 L6.940,13.207 C6.940,13.435 6.731,13.549 6.521,13.549 C6.311,13.549 6.102,13.435 6.102,13.207 L6.102,11.835 L4.110,11.835 C3.900,11.835 3.795,11.606 3.795,11.378 C3.795,11.149 3.900,10.921 4.110,10.921 L6.102,10.921 L6.102,10.121 L4.949,10.121 C4.739,10.121 4.634,9.892 4.634,9.664 C4.634,9.435 4.739,9.206 4.949,9.206 L5.892,9.206 L4.739,7.950 C4.634,7.835 4.739,7.606 4.949,7.492 C5.158,7.378 5.368,7.264 5.473,7.378 L6.521,8.635 L7.674,7.264 C7.779,7.149 7.989,7.264 8.198,7.378 C8.408,7.492 8.408,7.721 8.408,7.835 L7.150,9.321 L8.094,9.321 C8.303,9.321 8.408,9.549 8.408,9.778 C8.408,10.007 8.303,10.235 8.094,10.235 L6.940,10.235 L6.940,11.035 L8.932,11.035 C9.142,11.035 9.247,11.264 9.247,11.493 C9.247,11.606 9.037,11.835 8.932,11.835 L8.932,11.835 Z"></path></svg>
+赞赏</button></div>        <div class="post-actions u-clearfix">
+            <div class="u-floatLeft share-actions">
+                <button class="button button--gray button--circle button--wechat"><span class="fa fa-wechat"></span><span class="qrcode-wrapper"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/saved_resource"></span></button>
+                <a class="button button--gray button--circle button--weibo" target="_blank" href="http://service.weibo.com/share/share.php?appkey=2775287854&amp;title=%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%8F%B0%E5%AE%9E%E6%88%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%98%BF%E9%87%8COneData%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8C%87%E6%A0%87%E7%AE%A1%E7%90%86%E4%BD%93%E7%B3%BB&amp;url=http://www.woshipm.com/data-analysis/2428698.html&amp;pic=http://image.woshipm.com/wp-files/2019/06/Gcg4ZWR076AJ6YmX0QZ0.png" "=""><span class="fa fa-weibo"></span></a>
+            </div>
+            <div class="u-floatRight">
+                <button title="收藏" class="button button--gray button--toggle button--recommend button-post-2428698 " data-id="2428698" data-action="popLogin"><span class="button-label is-default">收藏</span><span class="button-label is-active">已收藏</span> | <span class="count">117</span></button><button class="button button--toggle button--gray button--postlike" data-action="uplike" data-id="2428698"><span class="button-label is-default">赞</span><span class="button-label is-active">已赞</span> | <span class="count">27</span></button>            </div>
+        </div>
+        </article>
+        <div class="postFooterInfo u-marginTop30 u-backgroundColorWhite u-rounded">
+            <div class="u-flex">
+                <div class="u-flex0">
+                    <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/60x60" alt="" height="60" width="60" class="avatar"></a>
+                </div>
+                <div class="u-flex1 u-paddingLeft15 u-overflowHidden">
+                    <div class=""><span class="title"><a href="http://www.woshipm.com/u/199204" target="_blank">华仔</a></span><button class="button button--toggle button--primary button--follow" data-action="showLoginForm" data-id="199204"><span class="is-default">订阅专栏</span><span class="is-active">取消订阅</span></button></div>
+                    <div class="des">公众号：改变世界的产品经理。</div>
+                </div>
+                <div class="u-flex0">
+                    <div class="authorInfo-item"><i>12篇</i>作品</div>
+                    <div class="authorInfo-item"><i>24.9万</i>总阅读量</div>
+                </div>
+            </div>
+        </div>
+        <div class="u-backgroundColorWhite comments-area">
+    <div class="comment-list-header"><span class="title">评论</span></div>
+    <div id="respond" class="respond respond-2428698" role="form">
+        <form action="http://www.woshipm.com/wp-comments-post.php" method="post" id="commentform" data-post="2428698" class="comment-form u-clearfix">
+                        <div class="textarea--unlogin" data-action="popLogin">欢迎留言讨论~！</div>
+                </form>
+    </div>
+            <div class="commentshow">
+            <ol class="comment-list">
+                        <li class="comment byuser comment-author-309532 even thread-even depth-1" id="li-comment-404582" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-404582" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/309532" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/WX_U_201708_20170817155916_2075.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/309532" target="_blank">背影</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>写的非常好，近期在搭建数据平台，帮助很大，期待后续更好的分享</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2020-01-14T12:03:06+08:00">2020/01/14</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-404582&#39;, &#39;404582&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+        <li class="comment byuser comment-author-735185 odd alt thread-odd thread-alt depth-1" id="li-comment-379203" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-379203" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/735185" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/woshipm_def_head.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/735185" target="_blank">手摇滚筒洗衣机</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>这篇文章是我在互联网上能找到的关于onedata最好的了，比阿里云上的都更容易理解</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-09-16T10:05:58+08:00">2019/09/16</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-379203&#39;, &#39;379203&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+        <li class="comment byuser comment-author-18390812129 even thread-even depth-1" id="li-comment-377763" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-377763" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/945158" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/WX_U_201909_20190907094752_5943.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/945158" target="_blank">吴国庆</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>写的很好，简单易懂，近期刚好再做零售行业数据中台，这篇文章对我帮助很大，感谢</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-09-07T09:53:04+08:00">2019/09/07</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-377763&#39;, &#39;377763&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+        <li class="comment byuser comment-author-311533 odd alt thread-odd thread-alt depth-1" id="li-comment-374826" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-374826" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/311533" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/APP_U_201712_20171231082344_2151.jpeg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/311533" target="_blank">老板来杯咖啡</a><span class="des">数据产品汪</span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>您好，我想请问一下，为什么搞个数据指标还要原型？直接数据开发搞定不就行了</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-08-26T08:32:17+08:00">2019/08/26</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-374826&#39;, &#39;374826&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+        <li class="comment byuser comment-author-D even thread-even depth-1" id="li-comment-365569" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-365569" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/915208" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/WX_U_201907_20190716205218_2241.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/915208" target="_blank">小D</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>您好！对派生指标里的“时间周期”不是很理解。比如，近30天，这个容易理解，是站在当前角度往前推30天；“自然周”、“自然月”这样的时间周期，该如何理解呢？例如派生指标：“自然月支付金额”，使用的时候，要指定哪个自然月吗？</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-16T20:55:52+08:00">2019/07/16</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-365569&#39;, &#39;365569&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+        <li class="comment byuser comment-author-swaggy odd alt thread-odd thread-alt depth-1" id="li-comment-362192" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-362192" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/908359" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/WX_U_201907_20190704151233_8547.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/908359" target="_blank">swaggy</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>您好，您觉得数据维度选择的难点在哪里呢</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-04T15:13:43+08:00">2019/07/04</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-362192&#39;, &#39;362192&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            <ol class="children">
+        <li class="comment byuser comment-author-199204 bypostauthor even depth-2" id="li-comment-362199" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-362199" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/40x40" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/199204" target="_blank">华仔</a><span class="post-c-a" title="文章作者">作者</span><span class="color-noraml">回复</span><a href="http://www.woshipm.com/data-analysis/2428698.html#comment-362192">swaggy</a></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>找到真正能指导业务的指标</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-04T15:35:32+08:00">2019/07/04</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-362199&#39;, &#39;362199&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+        <li class="comment byuser comment-author-747593 odd alt thread-even depth-1" id="li-comment-361525" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-361525" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/747593" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/woshipm_def_head.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/747593" target="_blank">产品余</a><span class="des">微信公众号：产品余</span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>不错，期待后面的文章</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-02T14:21:46+08:00">2019/07/02</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-361525&#39;, &#39;361525&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            <ol class="children">
+        <li class="comment byuser comment-author-199204 bypostauthor even depth-2" id="li-comment-361529" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-361529" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/40x40" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/199204" target="_blank">华仔</a><span class="post-c-a" title="文章作者">作者</span><span class="color-noraml">回复</span><a href="http://www.woshipm.com/data-analysis/2428698.html#comment-361525">产品余</a></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>欢迎持续关注gzh 改变世界的产品经理</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-02T14:24:02+08:00">2019/07/02</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-361529&#39;, &#39;361529&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+        <li class="comment byuser comment-author-Audrey odd alt thread-odd thread-alt depth-1" id="li-comment-360975" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-360975" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/171683" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/def_head.jpg" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/171683" target="_blank">Audrey</a><span class="des"></span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>很棒，简单易懂，期待后面的文章</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-06-29T15:54:48+08:00">2019/06/29</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-360975&#39;, &#39;360975&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            <ol class="children">
+        <li class="comment byuser comment-author-199204 bypostauthor even depth-2" id="li-comment-361528" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-361528" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/40x40" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/199204" target="_blank">华仔</a><span class="post-c-a" title="文章作者">作者</span><span class="color-noraml">回复</span><a href="http://www.woshipm.com/data-analysis/2428698.html#comment-360975">Audrey</a></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>欢迎持续关注gzh 改变世界的产品经理</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-02T14:23:52+08:00">2019/07/02</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-361528&#39;, &#39;361528&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+        <li class="comment byuser comment-author-782092 odd alt thread-even depth-1" id="li-comment-357285" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-357285" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/782092" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/40x40(1)" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/782092" target="_blank">东陵碣石</a><span class="des">努力加油的俩岁PM</span></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>通过结合实例变得更好理解了[大拇指]</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-06-17T15:56:08+08:00">2019/06/17</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-357285&#39;, &#39;357285&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            <ol class="children">
+        <li class="comment byuser comment-author-199204 bypostauthor even depth-2" id="li-comment-361527" itemtype="http://schema.org/Comment" itemscope="" itemprop="comment">
+            <div id="comment-361527" class="comment-block">
+                    <div class="comment-avatar pm-relative">
+                        <a href="http://www.woshipm.com/u/199204" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/40x40" alt="" height="40" width="40" class="avatar"></a>
+                                            </div>
+                <div class="comment-info">
+                    <div class="comment-meta">
+                                                                            <div class="comment-author" itemprop="author"><a href="http://www.woshipm.com/u/199204" target="_blank">华仔</a><span class="post-c-a" title="文章作者">作者</span><span class="color-noraml">回复</span><a href="http://www.woshipm.com/data-analysis/2428698.html#comment-357285">东陵碣石</a></div>
+                                  
+                       
+                    </div>
+                </div>
+                <div class="comment-content" itemprop="description">
+                    <p>欢迎持续关注gzh 改变世界的产品经理</p>
+                </div>
+
+                    <div class="u-clearfix comment-bottom"><span class="comment-time" itemprop="datePublished" datetime="2019-07-02T14:23:41+08:00">2019/07/02</span><span class="comment-reply-link u-floatRight u-cursorPointer" onclick="return addComment.moveForm(&#39;comment-361527&#39;, &#39;361527&#39;, &#39;respond&#39;, &#39;2428698&#39;)"><span class="fa fa-comment"></span>回复</span></div>
+            </div>
+            </li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+            </ol>
+            <nav class="commentnav" data-fuck="2428698">
+                            </nav>
+        </div>
+    </div>        <div class="u-backgroundColorWhite promote-posts-wrapper u-rounded">
+            <h2 class="comments-title">您可能感兴趣的文章</h2>
+            <div class="promote-posts">
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://996.pm/YBWqW" style="background-image: url(http://image.woshipm.com/wp-files/2019/01/Lz4EJhGzHGpi0FErTGmN.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://996.pm/YBWqW">每天3块钱，补齐互联网专业知识，提升职场竞争力</a></div>
+                    </div>
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://www.woshipm.com/pd/3414743.html" style="background-image: url(http://image.woshipm.com/wp-files/2020/02/oiQ9H5lBRH8OdgBIPLHQ.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://www.woshipm.com/pd/3414743.html">支付宝如何做社交，重寻线上支付优势？</a></div>
+                    </div>
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://www.woshipm.com/copy/3417664.html" style="background-image: url(http://image.woshipm.com/wp-files/2020/02/N8bRHUrRYGmxxZZH8V6V.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://www.woshipm.com/copy/3417664.html">你被绑架了，广告文案中的“贩卖恐惧”</a></div>
+                    </div>
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://www.woshipm.com/it/3418275.html" style="background-image: url(http://image.woshipm.com/wp-files/2020/02/39vLu4Wp3cPrlcZqAGyo.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://www.woshipm.com/it/3418275.html">小程序直播公测，微信能否再造电商梦？</a></div>
+                    </div>
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://www.woshipm.com/operate/3419861.html" style="background-image: url(http://image.woshipm.com/wp-files/2020/02/KlDCArCi4X6xO6YXF5md.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://www.woshipm.com/operate/3419861.html">以产品推广为例，分析如何做运营策略？</a></div>
+                    </div>
+                                    <div class="promote-post-item">
+                        <a target="_blank" href="http://www.woshipm.com/pmd/3426014.html" style="background-image: url(http://image.woshipm.com/wp-files/2020/02/IQpJpu4Szasu4OYw81WQ.jpg!/both/254x160)" class="promote-post-image">
+                        </a>
+                        <div class="promote-post-title"><a target="_blank" href="http://www.woshipm.com/pmd/3426014.html">做 ToB 产品，产品经理需要怎么做？</a></div>
+                    </div>
+                            </div>
+        </div>
+    </div>
+    </div>
+<div class="u-width335 u-floatRight js-sidebar">
+                       <div class="widget u-backgroundColorWhite">
+        <div class="inner">
+            <div class="widget-title"><span><svg class="svgIcon-use" width="20" height="20" viewBox="0 0 20 20"><path d="M6.551,8.213 L7.586,8.213 C7.586,9.594 8.667,10.713 10.000,10.713 C11.333,10.713 12.414,9.594 12.414,8.213 L13.448,8.213 C13.448,10.186 11.904,11.784 10.000,11.784 C8.096,11.784 6.551,10.186 6.551,8.213 ZM16.561,16.551 L17.597,19.999 L16.552,19.999 L16.207,18.928 L16.209,18.928 L15.277,15.706 C15.301,15.706 15.324,15.713 15.349,15.713 C17.347,15.713 18.966,14.034 18.966,11.963 C18.966,10.732 18.386,9.649 17.502,8.965 C17.110,11.828 15.232,14.189 12.701,15.189 L13.818,18.928 L13.815,18.928 L14.138,19.999 L13.103,19.999 L12.759,18.928 L11.275,14.511 C14.283,13.896 16.552,11.151 16.552,7.856 C16.552,4.108 13.618,1.070 10.000,1.070 C6.382,1.070 3.448,4.108 3.448,7.856 C3.448,11.151 5.717,13.896 8.724,14.511 L7.241,18.928 L6.896,19.999 L5.862,19.999 L6.182,18.928 L6.182,18.928 L7.298,15.190 C4.768,14.189 2.890,11.829 2.498,8.967 C1.615,9.650 1.035,10.733 1.035,11.963 C1.035,14.034 2.655,15.713 4.655,15.713 C4.679,15.713 4.702,15.706 4.726,15.706 L3.793,18.928 L3.448,19.999 L2.404,19.999 L3.441,16.551 C1.460,16.001 -0.000,14.144 -0.000,11.931 C-0.000,10.120 0.978,8.544 2.420,7.730 C2.486,3.449 5.851,-0.001 10.000,-0.001 C14.148,-0.001 17.513,3.449 17.580,7.729 C19.022,8.542 20.000,10.119 20.000,11.931 C20.000,14.144 18.541,16.001 16.561,16.551 Z"></path></svg>圈子</span></div>
+            <div class="widget-content">
+                <div class="contact-area">
+                    <ul class="code-ul">
+                        <li><span class="text">产品经理群</span><a target="_blank" href="https://jq.qq.com/?_wv=1027&amp;k=5NIRutI"><i>+</i>加入</a></li>
+<li><span class="text">运营交流群</span><a target="_blank" href="https://jq.qq.com/?_wv=1027&amp;k=5hecSGM"><i>+</i>加入</a></li>
+<li><span class="text">营销增长群</span><a target="_blank" href="https://jq.qq.com/?_wv=1027&amp;k=5SPnk0p"><i>+</i>加入</a></li>
+<li><span class="text">文案交流群</span><a target="_blank" href="https://jq.qq.com/?_wv=1027&amp;k=5QAry4u"><i>+</i>加入</a></li>
+<li><span class="text">Axure学习群</span><a target="_blank" href="https://jq.qq.com/?_wv=1027&amp;k=5CDNpU1"><i>+</i>加入</a></li>                    </ul>
+                    <dl class="code-dl">
+                        <dd>
+                            <img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/pm-erweima.jpg">
+                        </dd>
+                        <dt>关注微信公众号</dt>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="widget widget-ad fixed-sidebar-id is-fixed"><a href="https://ke.qq.com/huodong/pmqidian16z_pc/index.html" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/23-1.png"></a><a href="https://ke.qq.com/huodong/pmqidian06_pc/index.html#tuin=1150f0e2" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/4-2.jpg"></a><a href="http://996.pm/7pjrP" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/8.jpg"></a></div><div class="widget u-backgroundColorWhite">
+        <div class="inner">
+            <div class="widget-title"><span><svg class="svgIcon-use" width="20" height="20" viewBox="0 0 20 20">
+  <path d="M20.000,9.999 C20.000,4.476 15.524,-0.001 9.999,-0.001 C4.477,-0.001 -0.000,4.476 -0.000,9.999 C-0.000,15.522 4.477,19.999 9.999,19.999 C12.267,19.999 14.342,19.227 16.021,17.957 C16.089,17.878 16.134,17.779 16.134,17.666 C16.134,17.422 15.937,17.223 15.692,17.223 C15.565,17.223 15.452,17.273 15.369,17.358 L15.365,17.358 C13.864,18.463 12.016,19.125 10.009,19.125 C5.009,19.125 0.954,15.069 0.954,10.069 C0.954,5.067 5.009,1.012 10.009,1.012 C15.011,1.012 19.065,5.067 19.065,10.069 C19.065,11.597 18.707,13.034 18.039,14.296 L18.039,14.304 C18.026,14.346 18.012,14.387 18.012,14.431 C18.012,14.677 18.212,14.876 18.456,14.876 C18.647,14.876 18.807,14.753 18.869,14.584 L18.869,14.588 C19.580,13.211 20.000,11.654 20.000,9.999 L20.000,9.999 L20.000,9.999 L20.000,9.999 ZM3.981,13.384 C3.704,13.384 3.480,13.160 3.480,12.883 L3.480,7.138 C3.480,6.861 3.704,6.637 3.981,6.637 C4.258,6.637 4.482,6.861 4.482,7.138 L4.482,12.883 C4.482,13.160 4.258,13.384 3.981,13.384 L3.981,13.384 ZM7.589,13.384 C7.313,13.384 7.088,13.160 7.088,12.883 L7.088,7.138 C7.088,6.861 7.313,6.637 7.589,6.637 C7.866,6.637 8.090,6.861 8.090,7.138 L8.090,12.883 C8.090,13.160 7.866,13.384 7.589,13.384 L7.589,13.384 ZM7.589,10.511 L3.981,10.511 C3.704,10.511 3.480,10.287 3.480,10.011 C3.480,9.734 3.704,9.510 3.981,9.510 L7.589,9.510 C7.865,9.510 8.090,9.734 8.090,10.011 C8.090,10.287 7.865,10.511 7.589,10.511 L7.589,10.511 ZM14.791,13.384 C14.515,13.384 14.291,13.160 14.291,12.883 L14.291,7.138 C14.291,6.861 14.515,6.637 14.791,6.637 C15.068,6.637 15.292,6.861 15.292,7.138 L15.292,12.883 C15.292,13.160 15.068,13.384 14.791,13.384 L14.791,13.384 ZM16.596,7.639 L12.988,7.639 C12.711,7.639 12.487,7.415 12.487,7.138 C12.487,6.861 12.711,6.637 12.988,6.637 L16.596,6.637 C16.872,6.637 17.097,6.861 17.097,7.138 C17.097,7.415 16.872,7.639 16.596,7.639 L16.596,7.639 ZM10.534,13.384 C9.426,13.384 8.524,12.482 8.524,11.374 L8.524,8.648 C8.524,7.539 9.426,6.637 10.534,6.637 C11.643,6.637 12.545,7.539 12.545,8.648 L12.545,11.374 C12.545,12.482 11.643,13.384 10.534,13.384 L10.534,13.384 ZM10.534,7.639 C9.978,7.639 9.526,8.092 9.526,8.648 L9.526,11.374 C9.526,11.930 9.978,12.382 10.534,12.382 C11.091,12.382 11.543,11.930 11.543,11.374 L11.543,8.648 C11.543,8.092 11.091,7.639 10.534,7.639 L10.534,7.639 Z"></path>
+</svg>热门文章</span></div><ul class="widget-post-list--withImage"><li class="widget-post-item--withImage">
+                    <div class="img">
+<a href="http://www.woshipm.com/pd/3401196.html" target="_blank">
+<img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/100x60" width="100" height="60">
+</a>
+</div>
+<div class="title"><a href="http://www.woshipm.com/pd/3401196.html">需求文档：没有标准、只有沟通</a></div>
+<div class="meta">2020-02-18</div>
+                </li><li class="widget-post-item--withImage">
+                    <div class="img">
+<a href="http://www.woshipm.com/data-analysis/3404561.html" target="_blank">
+<img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/100x60(1)" width="100" height="60">
+</a>
+</div>
+<div class="title"><a href="http://www.woshipm.com/data-analysis/3404561.html">如何对APP进行数据分析？</a></div>
+<div class="meta">2020-02-19</div>
+                </li><li class="widget-post-item--withImage">
+                    <div class="img">
+<a href="http://www.woshipm.com/pd/3405992.html" target="_blank">
+<img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/100x60(2)" width="100" height="60">
+</a>
+</div>
+<div class="title"><a href="http://www.woshipm.com/pd/3405992.html">C端、B端、G端的三个关键词：人性、钱、利益</a></div>
+<div class="meta">2020-02-19</div>
+                </li><li class="widget-post-item--withImage">
+                    <div class="img">
+<a href="http://www.woshipm.com/evaluating/3406004.html" target="_blank">
+<img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/100x60(3)" width="100" height="60">
+</a>
+</div>
+<div class="title"><a href="http://www.woshipm.com/evaluating/3406004.html">叮咚买菜产品分析 | 叮咚，你的菜到了</a></div>
+<div class="meta">2020-02-20</div>
+                </li><li class="widget-post-item--withImage">
+                    <div class="img">
+<a href="http://www.woshipm.com/operate/3405924.html" target="_blank">
+<img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/100x60(4)" width="100" height="60">
+</a>
+</div>
+<div class="title"><a href="http://www.woshipm.com/operate/3405924.html">在抖音，怎么做一个“赚钱”的vlog博主？</a></div>
+<div class="meta">2020-02-19</div>
+                </li></ul></div></div><div class="widget u-backgroundColorWhite">
+        <div class="inner">
+            <div class="widget-title"><span><svg class="svgIcon-use" width="20" height="20" viewBox="0 0 20 20">
+  <path d="M20.000,9.999 C20.000,4.476 15.524,-0.001 9.999,-0.001 C4.477,-0.001 -0.000,4.476 -0.000,9.999 C-0.000,15.522 4.477,19.999 9.999,19.999 C12.267,19.999 14.342,19.227 16.021,17.957 C16.089,17.878 16.134,17.779 16.134,17.666 C16.134,17.422 15.937,17.223 15.692,17.223 C15.565,17.223 15.452,17.273 15.369,17.358 L15.365,17.358 C13.864,18.463 12.016,19.125 10.009,19.125 C5.009,19.125 0.954,15.069 0.954,10.069 C0.954,5.067 5.009,1.012 10.009,1.012 C15.011,1.012 19.065,5.067 19.065,10.069 C19.065,11.597 18.707,13.034 18.039,14.296 L18.039,14.304 C18.026,14.346 18.012,14.387 18.012,14.431 C18.012,14.677 18.212,14.876 18.456,14.876 C18.647,14.876 18.807,14.753 18.869,14.584 L18.869,14.588 C19.580,13.211 20.000,11.654 20.000,9.999 L20.000,9.999 L20.000,9.999 L20.000,9.999 ZM3.981,13.384 C3.704,13.384 3.480,13.160 3.480,12.883 L3.480,7.138 C3.480,6.861 3.704,6.637 3.981,6.637 C4.258,6.637 4.482,6.861 4.482,7.138 L4.482,12.883 C4.482,13.160 4.258,13.384 3.981,13.384 L3.981,13.384 ZM7.589,13.384 C7.313,13.384 7.088,13.160 7.088,12.883 L7.088,7.138 C7.088,6.861 7.313,6.637 7.589,6.637 C7.866,6.637 8.090,6.861 8.090,7.138 L8.090,12.883 C8.090,13.160 7.866,13.384 7.589,13.384 L7.589,13.384 ZM7.589,10.511 L3.981,10.511 C3.704,10.511 3.480,10.287 3.480,10.011 C3.480,9.734 3.704,9.510 3.981,9.510 L7.589,9.510 C7.865,9.510 8.090,9.734 8.090,10.011 C8.090,10.287 7.865,10.511 7.589,10.511 L7.589,10.511 ZM14.791,13.384 C14.515,13.384 14.291,13.160 14.291,12.883 L14.291,7.138 C14.291,6.861 14.515,6.637 14.791,6.637 C15.068,6.637 15.292,6.861 15.292,7.138 L15.292,12.883 C15.292,13.160 15.068,13.384 14.791,13.384 L14.791,13.384 ZM16.596,7.639 L12.988,7.639 C12.711,7.639 12.487,7.415 12.487,7.138 C12.487,6.861 12.711,6.637 12.988,6.637 L16.596,6.637 C16.872,6.637 17.097,6.861 17.097,7.138 C17.097,7.415 16.872,7.639 16.596,7.639 L16.596,7.639 ZM10.534,13.384 C9.426,13.384 8.524,12.482 8.524,11.374 L8.524,8.648 C8.524,7.539 9.426,6.637 10.534,6.637 C11.643,6.637 12.545,7.539 12.545,8.648 L12.545,11.374 C12.545,12.482 11.643,13.384 10.534,13.384 L10.534,13.384 ZM10.534,7.639 C9.978,7.639 9.526,8.092 9.526,8.648 L9.526,11.374 C9.526,11.930 9.978,12.382 10.534,12.382 C11.091,12.382 11.543,11.930 11.543,11.374 L11.543,8.648 C11.543,8.092 11.091,7.639 10.534,7.639 L10.534,7.639 Z"></path>
+</svg>大家都在问</span></div>
+            <div class="widget-content hot-question-list js-hot-qlist"><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/kv4onj.html"><span class="fa fa-caret-right"></span>怎么引导用户更新app，而且用户不反感？</a></div><div class="meta">20个回答<span class="dot"></span>32人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/0f3ses.html"><span class="fa fa-caret-right"></span>【每日一问】当下的科技产品对老年人有哪些不友好之处？</a></div><div class="meta">11个回答<span class="dot"></span>18人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/orotvf.html"><span class="fa fa-caret-right"></span>基于当前的美团外卖，如何从产品角度提高用户的订单量？</a></div><div class="meta">18个回答<span class="dot"></span>59人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/dns9ge.html"><span class="fa fa-caret-right"></span>【每日一问】社交产品，如何避免用户双方熟悉后，添加微信进行后续聊天？</a></div><div class="meta">19个回答<span class="dot"></span>39人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/t499id.html"><span class="fa fa-caret-right"></span>【每日一问】什么样的场景会让你心甘情愿地购买付费会员？</a></div><div class="meta">18个回答<span class="dot"></span>107人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/dk2ige.html"><span class="fa fa-caret-right"></span>有效期剩余天数计算应不应该含当日</a></div><div class="meta">24个回答<span class="dot"></span>49人关注</div></div><div class="hot-question-item"><div class="title"><a href="https://wen.woshipm.com//question/detail/8cgbm9.html"><span class="fa fa-caret-right"></span>做一个好的产品经理，最重要的是哪个因素？</a></div><div class="meta">45个回答<span class="dot"></span>160人关注</div></div></div></div></div>    </div>    </div>
+<footer class="site-footer">
+    <div class="container u-flex footer-sections">
+        <section class="info-section">
+            <div class="footer-title">关于</div>
+            人人都是产品经理（woshipm.com）是以产品经理、运营为核心的学习、交流、分享平台，集媒体、培训、社群为一体，全方位服务产品人和运营人，成立9年举办在线讲座500+期，线下分享会300+场，产品经理大会、运营大会20+场，覆盖北上广深杭成都等15个城市，在行业有较高的影响力和知名度。平台聚集了众多BAT美团京东滴滴360小米网易等知名互联网公司产品总监和运营总监，他们在这里与你一起成长。        </section>
+        <section class="link-section">
+        <div class="footer-title">链接</div>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="https://www.lagou.com/gongsi/318344.html" target="_blank">加入我们</a></li>
+                    <li><a href="http://www.woshipm.com/it/1010671.html" target="_blank">投稿须知</a></li>
+                    <li><a href="https://wen.woshipm.com/question/detail/omkf.html" target="_blank">意见反馈</a></li>
+                    <li><a href="http://www.woshipm.com/disclaimer" target="_blank">免责声明</a></li>
+                </ul>
+            </nav>
+        </section>
+        <section class="partner-section">
+            <div class="footer-title">合作伙伴</div>
+            <ul class="blue-pic-ul">
+                <li><a href="https://www.qidianla.com/?woshipm" title="起点学院" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/qidian.png" alt="起点学院" title="起点学院"></a></li>
+<li><a href="http://www.cyzone.cn/?woshipm" title="创业邦" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/s99dragqAZYcQyaoKEQn.png" alt="创业邦" title="创业邦"></a></li>
+<li><a href="http://ke.qq.com/?from=95" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/6-1.png" alt="腾讯课堂"></a></li>
+<li><a href="http://www.geetest.com/?woshipm" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/3-3.png" alt="极验验证"></a></li>
+<li><a href="http://www.zhisheji.com/?woshipm" title="致设计" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/4-2.png" alt="致设计" title="致设计"></a></li>
+<li><a href="https://www.polyv.net/?-cpjl" target="_blank"><img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/6l2REEv8v7NT9gTOhcNi.png" alt="保利威"></a></li>
+            </ul>
+        </section>
+        <section class="qr-section" style="margin-left: auto;">
+        <div class="footer-title">APP下载</div>
+            <img src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/twr9dxFu31L06DVY160D.png">
+            <p>iPhone &amp; Android</p>
+        </section>
+    </div>
+    <div class="copyright">
+        <div class="container u-flex">
+        <div>旗下品牌: <a target="_blank" href="https://www.qidianla.com/">起点学院</a> | <a target="_blank" href="https://www.yunyingpai.com/">运营派</a> | <a target="_blank" href="http://www.zhaopins.com/">秒聘网</a> <br>
+©2010-2019 - 人人都是产品经理 - <a target="_blank" href="http://beian.miit.gov.cn/">粤ICP备14037330号-1</a>-<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502001309">粤公网安备 44030502001309号</a>
+<br>
+ <a target="_blank" href="http://image.woshipm.com/wp-files/2019/03/vR6mPdp9uXiiRjZedOBX.jpg">广播电视节目制作经营许可证（粤）字第03109号</a> 版权所有 © 深圳聚力创想信息科技有限公司</div>
+        <div style="margin-left:auto;text-align: right">企业内训/课程咨询和合作: 18682011582<br>其他合作/投诉/意见反馈: 18123776760</div>
+    </div>
+    </div>
+</footer>
+</div>
+<div class="back2top is-active"><span class="fa-angle-up fa"></span></div>
+<div class="u-hide"><script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fb85cbcc76e92e3fd79be8f2fed0f504f' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/h.js.下载" type="text/javascript"></script><a href="http://tongji.baidu.com/hm-web/welcome/ico?s=b85cbcc76e92e3fd79be8f2fed0f504f" target="_blank">网站统计</a></div>
+<script type="text/javascript" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/wechat.js.下载"></script>
+<script type="text/javascript" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/jquery.jplayer.min.js.下载"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var PURE = {"ajax_url":"http:\/\/www.woshipm.com\/wp-admin\/admin-ajax.php","restapi":"http:\/\/www.woshipm.com\/__api\/","nonce":"a1c941777d","home_url":"http:\/\/www.woshipm.com","is_user_logged_in":"","is_singular":"1","is_home":"","id":"2428698","token":"","secret":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/misc.js.下载"></script>
+<script type="text/javascript" src="./数据中台实战（二）：基于阿里OneData的数据指标管理体系 _ 人人都是产品经理_files/comment-reply.min.js.下载"></script>
+
+</body></html>

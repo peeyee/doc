@@ -1,0 +1,67 @@
+/**
+ * @author Administrator
+ * @date 2020年1月1日
+ *
+ */
+package learnhbase;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.RowMutations;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
+
+/** checkAndMutate 是一个单行的原子方法
+ * @author Administrator
+ *
+ */
+public class HelloMutate {
+
+	/**
+	 * @param args
+	 * 下午7:12:17
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+
+		Configuration conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "oracle-11g:2181"); //连接zookeeper
+		Connection conn = ConnectionFactory.createConnection(conf);
+		
+		Table table = conn.getTable(TableName.valueOf("mytable"));
+		
+		//删除row1这行数据的class列
+		Delete delClass = new Delete(Bytes.toBytes("row1"));
+		delClass.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("class"));
+		
+		//修改name列	
+		Put modifyName = new Put(Bytes.toBytes("row1"));
+		modifyName.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("name"),Bytes.toBytes("Bob"));
+		
+		
+		//增加job列
+		Put addJob = new Put(Bytes.toBytes("row1"));
+		addJob.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("job"),Bytes.toBytes("Engineer"));
+		
+		//新增RowMutations类，将上述3个操作组合，原子化。
+		RowMutations rowMutations = new RowMutations(Bytes.toBytes("row1"));
+		rowMutations.add(delClass);
+		rowMutations.add(modifyName);
+		rowMutations.add(addJob);
+		
+		//执行操作
+		table.mutateRow(rowMutations);
+		
+		conn.close();
+		System.out.println("mutate data sucessfully.");
+	}
+
+}

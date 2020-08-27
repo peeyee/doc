@@ -1,0 +1,17 @@
+==Set
+1. set中的元素是唯一的。
+val hashSet = HashSet("a", "b")
+val Set = Set("a", "b")
+
+==APi
+
+1. + 
+添加元素，返回一个添加新元素的新set
+
+
+2. contains
+检验元素是否存在于set中
+
+
+3. 可变与不可变
+不可变，immutable， 指的是不能改变其内容

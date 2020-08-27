@@ -1,5 +1,0 @@
-1.设置文件注释模板
-File-->settings-->Editor-->File and Code Templates-->Files
-我们选择Class文件（当然你要设置接口的还也可以选择Interface文件），
-${USER}、${DATE}、${TIME}：设置创建类的用户、创建的日期和时间，这些事IDEA内置的方法，还有一些其他的方法在绿色框标注的位置，比如你想添加项目名则可以使用${PROJECT_NAME}。
-设置版本号，一般新创建的类都是1.0版本，可以直接先写上1.0，后期有需要可改.

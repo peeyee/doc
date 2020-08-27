@@ -1,0 +1,91 @@
+1. git commit
+git commit --amend
+
+2. git branch
+git branch bugFix --创建分支
+git checkout bugFix -- 切换到bugFix分支
+
+3. git merge
+融合，将两个分支融合成一个新的提交点。这个提交点有两个双亲。
+
+
+
+4.git rebase
+rebase不会引入新的提交点，使开发历史更线性。
+rebase 意为以某个commit为基准，把当前分支合并上去。
+git rebase -i（交互模式） HEAD^ -- 整理上一个提交
+pick 取
+omit 舍弃
+
+设当前分支为bugFix
+git rebase master 
+
+5 git 引用
+HEAD 指向当前分支头部
+^ 向上移动一格
+~n,向前移动n格
+
+git branch -f master HEAD~3 --强制master分支指向head的前3个提交点。
+
+
+cat .git/HEAD
+
+
+6 git log
+查看提交历史
+
+
+7. git reset -- 反悔1
+git reset 通过将分支回撤几个提交来取消更改。
+git reset HEAD^1 -- 将当前分支回退到上一个提交点。
+
+8. git revert -- 反悔2，reset是自己玩，revert可以分享给别人。
+git revert 会通过引入一个新的提交点的方式回退至指定点。
+git revert 之后可以推送至远程仓库，分享“回退”。
+
+
+9 git cherry-pick
+用于整理提交记录。
+git cherry-pick 提交号
+
+
+10 git tag
+标签，相比于随意移动的分支，是一个比较固定的版本锚，标识了某个固定的位置。常用于标记固定的版本。
+git tag <tag_name> <commit>
+
+11.git describe
+用法： git describe <ref>某个提交的引用或者hash值 ，用于查找当前分支最近的标签，以及和它的差距。
+输出格式：<tag>_<numCommits>_g<hash>
+
+================================
+
+====git 远程提交======
+
+1.git clone
+git clone <url>
+拷贝远程的代码。远程分支的命名规格:<remote>/<local>.
+
+
+2.git fetch
+git fetch http://|git:// xxx.获取与远程仓库的差异代码。
+
+*****注意*********
+git fetch 不会做的事
+git fetch 并不会改变你本地仓库的状态。它不会更新你的 master 分支，也不会修改你磁盘上的文件。
+
+理解这一点很重要，因为许多开发人员误以为执行了 git fetch 以后，他们本地仓库就与远程仓库同步了。它可能已经将进行这一操作所需的所有数据都下载了下来，
+但是并没有修改你本地的文件。
+
+所以, 你可以将 git fetch 的理解为单纯的下载操作
+
+3.git pull
+拉取并融合远程仓库的分支
+
+git pull == git fetch && git merge
+git pull --rebase,可以先获取并合并远程的改动，并提交本地分支的commit
+
+4.git push
+-
+
+
+

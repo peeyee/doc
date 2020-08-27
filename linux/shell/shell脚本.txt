@@ -1,0 +1,253 @@
+1.语法规则
+# 注释
+\ 换行连接符，一行写不下时，利用\进行换行继续输入
+读入CR回车符时，开始执行这行的命令、
+赋值语言注意不能有空 aaa = bbb会被解释为执行aaa命令
+正确的赋值语言： aaa=bbb
+
+1.sh01.sh 
+#!/bin/bash
+# program:
+#    this program shows "hello world" in your screen
+# author: yee yeyoung0909@163.com
+# version: 1.0
+# changelog:
+# copyright: GNU GPLv3.0 
+echo -e "hello world!\a\n"
+exit 0
+
+###养成良好的书写习惯
+在脚本中备注如下事项
+1.脚本的功能
+2.脚本的作者和联系方式
+3.版本
+4.日期
+5.改动信息
+6.版权
+
+
+2. sh02.sh 
+#!/bin/bash
+# program:
+#    this program ask user to input first and lastname,then output fullname
+# author: yee
+# version: 1.0
+# history:
+# copyright: GNU GPLv3.0 
+read -p "please input your first name." firstname
+read -p "please input your last name." lastname
+echo "your fullname is: $firstname $lastname."
+
+exit 0
+**shell中的变量**
+定义变量：直接使用名称
+引用变量： $variable_name
+
+3. sh03
+[root@oracle-11g scripts]# cat sh03.sh
+#!/bin/bash
+#program
+# this shell creates a file with date and user inputs
+# author: yee yeyoung0909@163.com
+# version: v1.0 
+# changelog:
+# copyright: freeOfcopy
+ echo -e "I will use 'touch' command to create 3 files."
+ read -p "Please input your filename: " filename
+#判断变量是否设置或者为空
+filename=${filename:-"filename"}
+
+#设置时间
+date1=$(date --date '2 days ago' +%Y%m%d)
+date2=$(date --date '1 days ago' +%Y%m%d)
+date3=$(date +%Y%m%d)
+
+#设置文件名
+file1="$filename""$date1"
+file2="$filename""$date2"
+file3="$filename""$date3"
+
+#创建文件名
+touch "$file1"
+touch "$file2"
+touch "$file3"
+
+**${var-var2} 语言用于检查和替换变量
+**$(command]) 用于执行括号中的命令。
+
+=================注意=============
+sh a.sh -- 在bash的内存栈中执行，相关设置在a.sh执行完成后，不会影响bash进程。
+source a.sh 在bash进程中执行，相关设置在bash中有效。
+
+举例a.sh
+[root@oracle-11g scripts]# cat a.sh
+#!/bin/bash
+# this program is to test sh ./ source
+# filename: a.sh
+# date: 20200105
+# author: yee
+
+举例，如下测试
+file1="aaa"
+[root@oracle-11g scripts]# ./a.sh
+[root@oracle-11g scripts]# echo $file1
+
+[root@oracle-11g scripts]# sh a.sh
+[root@oracle-11g scripts]# echo $file1
+
+[root@oracle-11g scripts]# source a.sh
+[root@oracle-11g scripts]# echo $file1
+aaa
+
+
+======================================
+长搭配test命令使用
+
+
+4.逻辑运算
+与 &&
+或 ||
+非 ！
+只能在[]外部使用
+在[]内部可以使用 -o => or, -a => and
+
+5.比较运算
+
+5.1文件比较
+-nt：newer than
+-ot: older than
+-ef: 是否为同一个文件
+
+5.2 整数判定
+-eq: 相等
+-ne: 不相等
+-gt: 大于
+-lt: 小于
+-ge: >=
+-le: <=
+
+
+5. sh05.sh
+#!/bin/bash
+#program
+# this shell test the inputfile and check:
+# 1. exists 2. file or directory 3 file permissions 
+# author: yee yeyoung0909@163.com
+# version: v1.0 
+# changelog:
+# copyright: freeOfcopy
+echo -e "Please input a file name and I will check the property of it.\n"
+read -p "Input a filename: " filename
+
+#判断是否存在
+test ! -e $filename && echo "the file $filename does not exists." && exit 0
+
+#判断文件类型
+test -f $filename && filetype="regular-file"
+test -d $filename && filetype="directory"
+
+#判断文件权限
+test -r $filename && perm="readable"
+test -w $filename && perm="$perm writable"
+test -x $filename && perm="$perm executable"
+
+echo -e "the file $filename is a $filetype."
+echo -e "the file is $perm."
+
+
+6.使用[]来做测试
+除了test，还可以使用[]来做判断。
+[ -f test ]&& echo "test if a file"
+[ "$filename" == "test"]
+注意括号旁边要留有空格。变量要用""包裹。
+
+
+7.shell的默认变量
+$0: 脚本的文件名。
+$1: 第一个参数。
+$2:	第二个参数。
+$N: 第N个参数。
+$#: 参数的总个数。
+$@: 参数的列表 $1, $2, $3, $4
+shift 可以使参数出队列
+[root@oracle-11g scripts]# cat sh07.sh 
+#!/bin/bash
+#program
+# this shell tell the script name and parameters
+# 
+# author: yee yeyoung0909@163.com
+# version: v1.0 
+# changelog:
+# copyright: freeOfcopy
+
+echo "The script name is =>$0 "
+echo "The parameter's number is $#"
+echo "The parameters are '$@'"
+
+echo "The first parameter is $1"
+echo "The second parameter is $2"
+
+8.条件判断
+8.1 if分支
+if [ exp1 ]; then
+	...
+elif [ exp2 ]; then
+	...
+else 
+	...	
+
+
+fi
+
+8.2 case 分支
+case $val in #注意$符号不能少
+ value1)
+ ;;
+ value2)
+ ;;
+ *) -- 其他情况
+ exit 1
+ ;;
+esac
+
+9. 函数
+函数一定要先定义，再使用
+function functionName()
+{
+	
+}
+
+函数接受默认的参数$1, $2...
+functionName xxx,
+
+
+10.循环
+
+while [ condition ]
+do
+  ...
+done
+
+until当条件满足的时候终止循环
+until [ condition ]
+do
+ ..
+done
+
+#var 依次遍历 con1 con2 con3
+for var in con1 con2 con3
+do
+   ...
+done
+
+for (( 初始值; 限制值; 执行步长))
+do
+  ...
+done
+
+
+11. shell的追踪与测试
+sh [-nvx] scripts.sh
+-n : 语法测试
+-v : 在执行脚本之前，先将脚本输出到屏幕
+-x : 在执行语句之前，先输出到屏幕

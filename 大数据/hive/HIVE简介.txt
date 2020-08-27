@@ -1,0 +1,17 @@
+1. HIVE
+  hive是FACEBOOK贡献给开源社区的，是HADOOP的SQL API -- HQL。HIVE通过解释HQL来生成对应的MR代码，
+进行使用HADOOP集群来进行计算。HIVE由FACEBOOK提供，在语法上与mysql极为相似。
+
+2. HIVE的特点
+简单，不适合OLTP场景，适合非更新，高时延的大数据分析场景，通常是一些批处理。
+*不支持增，删，改，和事务。
+*没有索引。
+
+/*Hive从0.14版本开始支持事务和行级更新,但缺省是不支持的,需要一些附加的配置。
+要想支持行级insert、update、delete,需要配置Hive支持事务。*/
+
+
+APACHE HIVE TM
+The Apache Hive ™ data warehouse software facilitates reading, writing, 
+and managing large datasets residing in distributed storage using SQL. Structure can be projected onto data already in storage.
+ A command line tool and JDBC driver are provided to connect users to Hive.

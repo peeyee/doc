@@ -1,0 +1,54 @@
+/**
+ * @author Administrator
+ * @date 2019年12月31日
+ *
+ */
+package learnhbase;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
+
+/**
+ * @author Administrator
+ *
+ */
+public class PutData {
+
+	/**
+	 * @param args
+	 * 下午7:25:57
+	 */
+	
+	
+	
+	public static void main(String[] args) 
+		throws IOException
+	{
+		// TODO Auto-generated method stub
+		Configuration conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "oracle-11g:2181"); //连接zookeeper
+		try
+		(
+			Connection conn = ConnectionFactory.createConnection(conf);
+		)
+		{
+		    Table table = conn.getTable(TableName.valueOf("mytable"));
+			Put putdata = new Put(Bytes.toBytes("row1"));	
+			putdata.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("name"), Bytes.toBytes("ted"))
+				   .addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("name"), Bytes.toBytes("lucy"))
+				   .addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("age"), Bytes.toBytes(13))
+				   .addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("class"),Bytes.toBytes("A"));
+			table.put(putdata);
+		}
+
+	}
+
+}

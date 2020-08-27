@@ -1,0 +1,2 @@
+1. vimtutor
+vimtutor -- 打开vi的官方教程

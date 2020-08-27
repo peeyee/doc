@@ -1,0 +1,14 @@
+1. 启动集群
+start-dfs.sh -- 启动hdfs
+start-yarn.sh -- 启动yarn
+mapred historyserver -- 启动jobhistory server
+
+
+2. 系统地址
+yarn 8088
+hadoop 50070
+jobhistory server 19888
+
+
+3.退出安全模式
+hadoop dfsadmin -safemode leave
