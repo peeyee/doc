@@ -7,3 +7,8 @@ resultMap.
         <result property="ruleId" column="rule_id"/>
 				...
     </resultMap>
+
+1. Error querying database.  Cause: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'checkTable' in 'class java.lang.String'
+触发条件: 使用if标签时
+解决方案: 	1. 将参数名称 checkTable ” 替换为”_parameter” ，结果正常。
+			2. 在mapper接口中定义方法时增加“@Param("checkTable")
