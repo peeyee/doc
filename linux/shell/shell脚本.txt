@@ -183,7 +183,7 @@ shift 可以使参数出队列
 echo "The script name is =>$0 "
 echo "The parameter's number is $#"
 echo "The parameters are '$@'"
-
+echo "The last shell is sucessful 0 or 1 $?"
 echo "The first parameter is $1"
 echo "The second parameter is $2"
 
