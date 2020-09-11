@@ -1,0 +1,56 @@
+一. 安装jdk
+
+    1.新建安装文件夹（例如 mkdir /usr/java）。
+
+    2.在安装文件夹中利用wget下载对应的rpm文件
+
+    [root@tidb1 java]wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn/java/jdk/8u261-b12/a4634525489241b9a9e1aa73d9e118e6/jdk-8u261-linux-x64.rpm?AuthParam=1599617556_aab4bb67e0ec82a0d32f71ec3a39a35a
+
+    [root@tidb1 java]# rpm -ivh jdk-8u261-linux-x64.rpm 
+
+
+2.配置安环境变量
+
+    1）利用vi /etc/profile编辑profile文件
+
+    2）加入如下内容（jdk文件夹名称根据实际的填写）
+    如果配置了tomcat用户的话，配置.bash_profile
+    #set java environment
+    JAVA_HOME=/usr/java/jdk1.8
+    JRE_HOME=/usr/java/jdk1.8/jre
+    CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+    PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+
+    export JAVA_HOME JRE_HOME CLASS_PATH PATH
+
+    3）利用source  /etc/profile让配置生效（无需该操作也可完成配置）。
+
+    4）配置完成输入java -version 下图表示成功。
+    [tomcat@tidb1 ~]$ java -version
+    java version "1.8.0_261"
+    Java(TM) SE Runtime Environment (build 1.8.0_261-b12)
+    Java HotSpot(TM) 64-Bit Server VM (build 25.261-b12, mixed mode)
+
+3.安装tomcat
+1.下载tomcat
+
+2安装tomcat
+[root@tidb1 java]# tar -zxvf /home/tomcat/apache-tomcat-8.5.57.tar.gz -C /usr/local/
+[root@tidb1 java]# chown -R tomcat:tomcat /usr/local/apache-tomcat-8.5.57/
+[root@tidb1 java]# mv /usr/local/apache-tomcat-8.5.57/ /usr/local/tomcat
+[root@tidb1 java]# echo "export TOMCAT_HOME=/usr/local/tomcat" >> /home/tomcat/.bash_profile
+
+[tomcat@tidb1 ~]$ source .bash_profile
+
+启动tomcat
+[tomcat@tidb1 bin]$ ./startup.sh 
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/java/jdk1.8/jre
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+Tomcat started.
+
+测试下localhost:8080地址是否出现了tomcat的默认页面。
+
+

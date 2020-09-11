@@ -1,0 +1,23 @@
+1. 配置远程访问
+新建 $your_tomcat_home/conf/Catalina/localhost/manager.xml
+<Context privileged="true" antiResourceLocking="false"
+         docBase="${catalina.home}/webapps/manager">
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+</Context>
+也可以在allow的后面配置ip限制。如172.16.*.*
+
+2.配置用户
+
+默认的tomcat不能访问，需要配置角色、用户名密码才能访问
+
+配置tomcat/conf//tomcat-users.xml
+<role rolename="admin-gui"/>
+<role rolename="admin-script"/>
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="manager-jmx"/>
+<role rolename="manager-status"/>
+<user username="yourname" password="yourpassword" roles="admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status"/>
+
+3 重启tomcat
+
