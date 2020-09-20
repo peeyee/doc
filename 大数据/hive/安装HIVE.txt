@@ -71,9 +71,9 @@ hive-site.xml 的主要配置有以下：
 	
 7.创建HDFS文件
 
- hdfs dfs -mkdir -p /user/hive/warehouse
- hdfs dfs -mkdir -p /tmp/hive
- hdfs dfs -chmod 777 /user/hive/warehouse
+ hdfs dfs -mkdir -p /user/hive/warehouse &&
+ hdfs dfs -mkdir -p /tmp/hive &&
+ hdfs dfs -chmod 777 /user/hive/warehouse &&
  hdfs dfs -chmod 777 /tmp/hive
  
  

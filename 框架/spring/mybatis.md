@@ -1,8 +1,5 @@
-1. 参数对应
 
-   在接口中设置多个参数的，可以按照param1，param2等等的顺序进行引用。
-
-2. mybatis-config相关配置
+## mybatis-config配置
 
 ```xml
 <properties resource="db.properties" />
@@ -14,7 +11,7 @@
 
 ```
 
-3. resultMap
+## resultMap
 
 select语句返回数据库的字段名和entity的字段名通常是不一样的，可以通过resultMap来设置对应关系。
 
@@ -27,3 +24,23 @@ select语句返回数据库的字段名和entity的字段名通常是不一样�
     <result property="resultType" column="result_type"/>
 </resultMap>
 ```
+
+## 传参
+
+### 参数对应
+
+在接口中设置多个参数的，可以按照param1，param2等等的顺序进行引用。
+
+## like匹配
+
+1. 使用like语法
+
+   参数传入%param%的形式，需要在传参数时，手动加入%%。
+
+2. 使用concat
+
+   ```sql
+   CONCAT('%',#{name},'%') 
+   ```
+
+使用concat来拼接字符串(mysql),如果是Oracle的话就是||。
