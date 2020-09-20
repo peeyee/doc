@@ -1,2 +1,5 @@
 IDEA运行Springboot报错Cannot access org.springframework.context.ConfigurableApplicationContext
 删除main.xml
+
+2.各种稀奇古怪的框架问题
+优先检查下，各组件的版本兼容性。
