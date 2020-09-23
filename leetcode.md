@@ -10,6 +10,8 @@ yeyoung0909@163.com/star0702
 
 在plugin->market搜索leetcode，安装后重启，在右侧栏有相应的leetcode图标。并配置本地测试环境，
 
+在TempFilePath中填入项目的source根目录.
+
 codefilename: $!velocityTool.camelCaseName(${question.titleSlug})
 
 codetemplate: 
@@ -25,4 +27,5 @@ public class $!velocityTool.camelCaseName(${question.titleSlug}) {
 
 本地调试环境就配置完成了。
 
-在提交代码时，需删除main方法。
+在提交代码时，需删除或注释main方法。
+

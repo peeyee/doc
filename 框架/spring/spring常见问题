@@ -4,3 +4,5 @@ IDEA运行Springboot报错Cannot access org.springframework.context.Configurable
 2. 本地运行正常，打jar包后无法正常扫描ｂｅａｎ
 
 仔细检查下子模块的各ｐｏｍ文件，看下打包插件是否冲突了。
+2.各种稀奇古怪的框架问题
+优先检查下，各组件的版本兼容性。
