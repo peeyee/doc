@@ -44,3 +44,9 @@ select语句返回数据库的字段名和entity的字段名通常是不一样�
    ```
 
 使用concat来拼接字符串(mysql),如果是Oracle的话就是||。
+
+# resultType
+
+## hashmap
+
+当返回的结果列的值是null时，mybatis不会将该列写入hashmap对象中
