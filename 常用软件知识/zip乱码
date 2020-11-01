@@ -1,0 +1,9 @@
+1. 通过unzip行命令解压，指定字符集
+unzip -O CP936 xxx.zip (用GBK, GB18030也可以)
+有趣的是unzip的manual中并无这个选项的说明, unzip --help对这个参数有一行简单的说明。
+
+
+2. 在环境变量中，指定unzip参数，总是以指定的字符集显示和解压文件
+/etc/environment中加入2行
+UNZIP="-O CP936"
+ZIPINFO="-O CP936"
