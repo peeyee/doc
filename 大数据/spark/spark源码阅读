@@ -1,0 +1,53 @@
+1. RDD
+spark中的最基本数据抽象,有如下特点:
+* 有多个分区
+* 不可变
+* 能够被并发计算
+* 惰性求值
+org.apache.spark.rdd.RDD
+是一个抽象类,包括RDD的方法.
+
+rdd的计算包括两种,转换和行动,转换是惰性计算的,只在需要输出数据时,才一并计算.
+
+
+
+2. DataSet
+针对SPARK-SQL而设计的一种数据结构.官方文档说要比rdd的效率要高.
+
+
+
+3. 本地模式 VS 分布式模式
+accumulator -- 累加器,计算全局的值. 如果使用闭包,在分布式条件下会出现非预期行为,因为变量在各自的JVM里.需要使用accumulator.
+
+要输出RDD全局的数据,需要使用collect收集各节点的数据到驱动节点.这通常会导致OOM,可以用take(N)来部分替代.
+
+
+4. shuffle 混淆
+让数据在集群中重新分布,是一个消耗很大的操作,会触发大量的网络IO.磁盘IO,序列化等操作.
+
+备注:官方文档没看懂.
+
+
+
+5. accumulator 和 broadcast variable
+sc.longAccumulator 累加器,在驱动节点的一个
+sc.broadcast
+
+
+=====SPARK SQL=========
+提供了书写SQL的高级API
+
+首先要创建一个sparkSession对象,
+然后用read.json返回一个DataFrame对象. 在scala里, DataFrame = DataSet[Row]
+其中的字段进行运算的时候要用$"age" > 21 $""将其包裹.
+
+然后创建视图
+createTempView是会话级的(任务级的)
+createGlobalTempView 全局级的,需要在视图前加上global_temp.
+
+
+DataSet: 官方说比RDD有更好的序列化手段,而且进行部分运算的时候不需要反序列化.
+Datasets are similar to RDDs, however, instead of using Java serialization or Kryo they use a specialized Encoder to serialize the objects for processing or transmitting over the network. While both encoders and standard serialization are responsible for turning an object into bytes, encoders are code generated dynamically and use a format that allows Spark to perform many operations like filtering, sorting and hashing without deserializing the bytes back into an object.
+
+
+
