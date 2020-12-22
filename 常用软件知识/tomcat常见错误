@@ -1,6 +1,0 @@
-1.tomcat启动报错：java.lang.IllegalStateException: ContainerBase.addChild: start: org.apache.catalina.LifecycleException:
-解决方法：
-
-　更改tomcat配置文件catalina.properties 。
-
-   tomcat.util.scan.DefaultJarScanner.jarsToSkip=\ 值后面加",*"。

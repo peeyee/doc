@@ -1,0 +1,26 @@
+
+jdk1.8的打包报错如下,这是由于1.8下的doc生成机制问题
+所以在pom里面的插件配置如下即可：
+
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-javadoc-plugin</artifactId>
+    <version>2.9</version>
+    <executions>
+        <execution>
+            <id>attach-javadocs</id>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+            <configuration>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+作者：吴世浩
+链接：https://www.jianshu.com/p/b7373d99f67d
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

@@ -1,0 +1,25 @@
+1.org.apache.ibatis.reflection.ReflectionException: There is no getter for property named ‘createTime’ in ‘class java.lang.String’
+mybatis要求entity类的属性与数据库字段的名称保持一致。所有先排除下xml文件的配置是否正确。两者不一致的，可以配置映射文件。并在select语句中引用
+resultMap.
+
+    <resultMap id="dataQualityRulesEntityResultMap" type="org.pinming.entity.DataQualityRulesEntity">
+
+        <result property="ruleId" column="rule_id"/>
+				...
+    </resultMap>
+
+1. Error querying database.  Cause: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'checkTable' in 'class java.lang.String'
+触发条件: 使用if标签时
+解决方案: 	1. 将参数名称 checkTable ” 替换为”_parameter” ，结果正常。
+			2. 在mapper接口中定义方法时增加“@Param("checkTable")
+
+
+2. pagehelper分页不生效
+PageHelper.startPage(pageNum,pageSize);
+改变分页大小的方法不生效。
+加入以下配置项。
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.10</version>
+</dependency>

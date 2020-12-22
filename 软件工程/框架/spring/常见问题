@@ -1,0 +1,5 @@
+# 常见问题
+
+## beans.xml 找不到
+
+idea的话，直接原因是idea没有将xml文件打包进目标编译文件target导致的。在target/classes目录下放置一份进去。

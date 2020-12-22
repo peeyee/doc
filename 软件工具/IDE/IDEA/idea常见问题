@@ -1,0 +1,21 @@
+1.idea没有编译某些配置文件
+解决：在pom文件中加入如下配置，让pom识别对应的后缀文件。
+   <resources>
+        <resource>
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </resource>
+        <resource>
+          <directory>resource</directory>
+          <includes>
+            <include>**/*.xml</include>
+            <include>**/*.yml</include>
+            <include>**/*.properties</include>
+          </includes>
+        </resource>
+      </resources>
+
+2. 项目导入后无法运行
+删除main.xml

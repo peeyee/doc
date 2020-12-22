@@ -1,0 +1,32 @@
+一 设置镜像 
+<mirror>  
+      <id>alimaven</id>  
+      <name>aliyun maven</name>  
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>  
+      <mirrorOf>central</mirrorOf>          
+    </mirror> 
+
+ <repositories><!-- 代码库 -->  
+        <repository>  
+            <id>maven-ali</id>  
+            <url>http://maven.aliyun.com/nexus/content/groups/public//</url>  
+            <releases>  
+                <enabled>true</enabled>  
+            </releases>  
+            <snapshots>  
+                <enabled>true</enabled>  
+                <updatePolicy>always</updatePolicy>  
+                <checksumPolicy>fail</checksumPolicy>  
+            </snapshots>  
+        </repository>  
+    </repositories> 
+
+
+二、指定本地仓库
+
+1、本机新建一个文件夹当做本地仓库
+
+我建的文件夹路径为：F:\MavenRepository
+
+2、在settings.xml中添加localRepository标签
+

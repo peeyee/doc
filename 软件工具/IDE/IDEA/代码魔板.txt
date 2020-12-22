@@ -1,0 +1,6 @@
+https://www.jetbrains.com/help/idea/using-live-templates.html
+使用简写+tab的方式快速完成代码
+
+psfs	public static final String
+psvm	public static void main(String[] args){}
+sout	System.out.println();

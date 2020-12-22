@@ -1,3 +1,0 @@
-1. 安装ModelGoon 插件
-2. 下载完该jar之后，直接拷贝到Eclipse安装目录下的dropins目录下，重启Eclipse即可 
-3.  安装成功后，file=>new=>other菜单里面会多出一项ModelGoon Diagrams

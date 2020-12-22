@@ -1,0 +1,9 @@
+1.打开eclipse→Windows→Preferences→Java→Editor→Content Assist
+
+2.修改Auto Activation triggers for java 为下列值
+.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW
+
+3.修改Auto Activation Delay ms为
+100
+
+4.点击APPLY
