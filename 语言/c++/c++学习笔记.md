@@ -123,11 +123,11 @@ using namespace std;
 
 引用一个命名空间中的所有内容。为了易用性，**编译器只允许使用一个命名空间**。否则，试想一下，使用两个以上的命名空间，很容易在编译器出现一大堆名称冲突。
 
-### 类与对象
+## 10类与对象
 
 oop语言相比过程式 的语言，抽象级别更高，更容易编写大型的复杂程序。
 
-#### OOP语言的思想
+### OOP语言的思想
 * 封装
 
 数据隐藏在类的内部，外部无法访问和操作，更加安全。
@@ -151,7 +151,7 @@ oop语言相比过程式 的语言，抽象级别更高，更容易编写大型�
 class A
 {
     private:
-    	int a;
+   	int a;
         int b;
     public:
        int getA();
@@ -172,7 +172,7 @@ A::getB()
 
 ```
 
-#### 构造与析构函数
+### 构造与析构函数
 
 构造函数
 
@@ -210,4 +210,84 @@ Stock stock2 = stock1;
 cout << "stock1.name address: " << &(stock1.name) << endl;
 cout << "stock2.name address: " << &(stock2.name) << endl;
 ```
+
+**类型转换**
+
+需要时，使用(typename)来进行类型转换。
+
+```
+TypeA a = (TypeA) typeB;
+```
+
+
+
+## 11运算符重载
+
+### 语法
+
+通过重载，可以使语法更为简洁和直观。比如类之间是没有+加法的。但是现实中其实有广义的加法的，比如将两个地区相加成为一个更大的地区。
+
+```c++
+returnType operatorop(argument-list)
+Area operator+(Area a)
+```
+
+其中op用具体的字符替代，运算符重载本质上是一个成员函数的调用，左侧是调用对象，右侧是参数。
+
+```c++
+//成员函数形式
+Area a;
+Area b;
+Area c = a.add(b);
+//重载形式
+Area c = a + b;
+```
+
+可以看到，重载模式更为简洁，更符合人类的思维模式。
+
+### 限制
+
+运算符重载有一些限制。
+
+1. 重载符左侧需是用户自定义的对象。
+2. 不能新增不存在的运算符，如**。
+3. 不能重载系统的部分运算符和关键字。
+
+```c++
+sizeof：sizeof运算符。
+.：成员运算符。
+. *：成员指针运算符。
+::：作用域解析运算符。
+?:：条件运算符。
+typeid：一个RTTI运算符。
+const_cast：强制类型转换运算符。
+dynamic_cast：强制类型转换运算符。
+reinterpret_cast：强制类型转换运算符。
+static_cast：强制类型转换运算符。
+```
+
+### 友元函数
+
+对于 Area+1000 这种类型的运算，我们可以通过重载运算符来定义其计算。但是如果 1000+area 这种形式的，重载就无能为力了。因为1000不是一个Area的对象，友元函数可以弥补这种缺陷。
+
+* 语法
+
+在类声明中，定义
+
+```c++
+friend Area operator+(double size, Area a)
+```
+
+在类定义中
+
+```c++
+Area operator+(double dsize, Area a)
+{
+    Area tmp;
+    tmp.size = dsize + a.size;
+    return tmp;
+}
+```
+
+友元函数不是类的成员函数，故在定义时不要加上::域限定符。
 

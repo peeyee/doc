@@ -15,8 +15,8 @@ void Person::FormalShow() const
   cout << lname << ", " << fname << endl;
 }
 
-Person(const string & ln, const char * fn = "Heyyou")
+Person::Person(const string & sln, const char * cfn)
 {
-  lname=ln;
-  strcpy(fname,fn);
+  lname=sln;
+  strcpy(fname,cfn);
 }

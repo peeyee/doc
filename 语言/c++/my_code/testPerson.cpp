@@ -8,9 +8,11 @@ int main(int argc, char const *argv[])
 	Person one;                      // use default constructor
 	Person two("Smythecraft");       // use #2 with one default argument
 	Person three("Dimwiddy", "Sam"); // use #2, no defaults
-	one.Show();
+	two.Show();
 	cout << endl;
-	one.FormalShow();
-
+	two.FormalShow();
+	three.Show();
+	cout << endl;
+	three.FormalShow();
 	return 0;
 }
