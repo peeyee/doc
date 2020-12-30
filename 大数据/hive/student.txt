@@ -1,3 +1,0 @@
-1,huwei,19
-2,leelee,20
-3,huangweifeng,22

@@ -1,0 +1,5 @@
+--报错
+--cannot access `/home/hadoop/tmp/mapred/staging/hive245058283/.staging/job_local245058283_0001': Permission denied
+
+没有/home/hadoop/tmp/mapred目录的读写权限，可以把hive加入到hadoop组
+usermod -a -G hadoop hive

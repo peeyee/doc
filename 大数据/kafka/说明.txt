@@ -1,2 +1,0 @@
-1. kafka要用zookeeper
-bin/zookeeper-server-start.sh config/zookeeper.properties

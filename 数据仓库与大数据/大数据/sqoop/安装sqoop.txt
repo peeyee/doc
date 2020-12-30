@@ -1,0 +1,17 @@
+1. 解压目录
+tar -zxvf sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz -C /opt
+mv /opt/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz /opt/sqoop-1.4.7
+chown -R hadoop:hadoop /opt/sqoop-1.4.7
+
+2. 设置环境变量
+export SQOOP_HOME=/opt/sqoop-1.4.7
+PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SQOOP_HOME/bin:$PATH
+source .bash_profile
+
+
+3.把mysql驱动复制到对应目录
+ cp /usr/share/java/mysql-connector-java.jar /opt/sqoop-1.4.7/lib
+ 
+ 
+4.测试
+sqoop list-databases --connect jdbc:mysql://oracle-11g:3306/ --username root
