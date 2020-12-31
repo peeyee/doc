@@ -1,0 +1,90 @@
+1. 安装maven
+修改配置文件
+cd .m2 && vi settings.xml
+在mirrors标签中设置
+   <mirror>
+		 <id>alimaven</id>
+		<name>aliyun maven</name>
+		<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		<mirrorOf>central</mirrorOf>
+	</mirror>
+
+2. 安装idea社区版
+2.1 安装scala插件
+2.2 安装scala-sdk,spark开发要选2.12
+
+3. 创建项目
+创建项目,点击 maven -> simple scala project. 一路next,开始构建
+
+
+4.配置pom
+  <properties>
+    <scala.version>2.12.10</scala.version>
+  </properties>
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-core_2.12</artifactId>
+  <version>${scala.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-streaming-kafka_2.12</artifactId>
+  <version>${scala.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-streaming_2.12</artifactId>
+  <version>${scala.version}</version>
+</dependency>
+
+<!-- scala -->
+<dependency>
+  <groupId>org.scala-lang</groupId>
+  <artifactId>scala-library</artifactId>
+  <version>2.10.4</version>
+</dependency>
+
+  <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <version>2.15.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+————————————————
+版权声明：本文为CSDN博主「Ricky_Huo」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/huochen1994/java/article/details/51275777
+
+
+
+
+
+====spark编程指南=====
+1.dependency
+groupId = org.apache.spark
+artifactId = spark-core_2.12
+version = 2.4.5
+
+2.提交作业
+spark-submit --master spark://172.16.8.36:7077 --class org.example.SimpleApp /home/tidb/sparklearn-1.0-SNAPSHOT.jar
+具体参数可 -h查看. 或者参考官方文档
+
+
+
+3.查看job信息
+master:4040,是job的监控地址.
+
+
+

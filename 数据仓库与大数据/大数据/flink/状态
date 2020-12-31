@@ -1,0 +1,11 @@
+1. 状态的含义
+如果流计算的算子需要用到之前历史的数据,则称为有状态,如sum,avg. 否则单个记录可以完整得出结果的,称为无状态,如filter,map.
+
+2. 状态的分类 keyed 和 Non-keyed(operator)
+按不同键存储状态的,称为keyed,如reduceByKey
+不区分key的,称为non-keyed.如一般的filter,map等.
+
+3. 按管理分类,Raw State 与 Managed State
+由flink管理结构的称为Managed State,由应用程序管理的称为rawed state.
+
+由于 Flink 可以在修改并发时更好的分发状态数据，并且能够更好的管理内存，因此建议使用 managed state（而不是 raw state）.

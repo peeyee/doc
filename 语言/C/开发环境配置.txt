@@ -1,3 +1,0 @@
-1. ide
-dev c++
-sublime text

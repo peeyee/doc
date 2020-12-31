@@ -3,4 +3,7 @@
 
 # 忽略编译的产出文件
 *.out
-**/my_code/*
+*.[os]
+*.ii
+*.gch
+#**/my_code/*

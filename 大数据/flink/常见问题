@@ -1,7 +1,0 @@
-Error:(292, 16) type mismatch;
- found   : com.streamingkmeans.MyProcessWindowFunction
- required: org.apache.flink.streaming.api.scala.function.ProcessWindowFunction[(Int, org.apache.flink.ml.math.DenseVector),?,org.apache.flink.api.java.tuple.Tuple,org.apache.flink.streaming.api.windowing.windows.TimeWindow]
-      .process(new MyProcessWindowFunction)
-
-解答:
-看下参数的类型是否正确,或者包是否正确引用

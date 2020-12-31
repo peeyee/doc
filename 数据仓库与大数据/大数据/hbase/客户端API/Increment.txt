@@ -1,0 +1,56 @@
+/**
+ * @author Administrator
+ * @date 2020年1月1日
+ *
+ */
+package learnhbase;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Increment;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
+
+/** 用于对数字进行自增(减)
+ * @author Administrator
+ *
+ */
+public class HelloIncrement {
+	public static void main(String[] args) 
+			throws IOException
+	{
+		// TODO Auto-generated method stub
+		Configuration conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "oracle-11g:2181"); //连接zookeeper
+		Connection conn = ConnectionFactory.createConnection(conf);
+		
+		Table table = conn.getTable(TableName.valueOf("mytable"));
+		
+		Put putdata = new Put(Bytes.toBytes("row3"));	
+		putdata.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("age"), Bytes.toBytes(30L))
+			.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("name"), Bytes.toBytes("yee"));
+		
+				
+				
+		table.put(putdata);
+		
+		
+		Increment inc = new Increment(Bytes.toBytes("row3"));
+		inc.addColumn(Bytes.toBytes("mycf"), Bytes.toBytes("age"), 10L);
+		
+		
+		
+		
+		table.increment(inc);
+		conn.close();
+		System.out.println("increment data sucessfully.");
+		
+											
+	}
+}

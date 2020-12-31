@@ -1,0 +1,49 @@
+/**
+ * @author Administrator
+ * @date 2019年12月31日
+ *
+ */
+package learnhbase;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Append;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
+
+/**
+ * @author Administrator
+ *
+ */
+public class HelloAppend {
+
+	/**
+	 * @param args
+	 * 下午8:20:22
+	 * @throws IOException 
+	 */
+	
+	
+	
+	public static void main(String[] args) 
+			throws IOException 
+	{
+		// TODO Auto-generated method stub
+		Configuration conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "oracle-11g:2181"); //连接zookeeper
+		Connection conn = ConnectionFactory.createConnection(conf);
+		
+		Table table = conn.getTable(TableName.valueOf("mytable"));
+		Append appenddata = new Append(Bytes.toBytes("row1"));
+		appenddata.add(Bytes.toBytes("mycf"), Bytes.toBytes("name"),Bytes.toBytes(":99$"));
+		table.append(appenddata);
+		System.out.println("append data Done.");
+		conn.close();
+	}
+
+}

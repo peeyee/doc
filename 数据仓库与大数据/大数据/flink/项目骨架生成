@@ -1,0 +1,6 @@
+   
+1. scala-maven骨架
+ $ mvn archetype:generate                               \
+      -DarchetypeGroupId=org.apache.flink              \
+      -DarchetypeArtifactId=flink-quickstart-scala     \
+      -DarchetypeVersion=1.10.0

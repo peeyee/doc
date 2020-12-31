@@ -1,0 +1,30 @@
+默认输出info级别，结果都淹没在info海洋里
+
+先看看自己的eclipse输出的第一行
+
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+
+然后再找找spark的import执行的jar包的spark-core所在位置（CTRL+T）
+
+我的在
+
+/home/hadoop/.m2/repository/org/apache/spark/spark-core_2.11/2.1.0
+
+找到后，命令行下解压
+
+jar xvf spark-core_2.11-2.1.0.jar
+
+find ./ -name log4j*.*
+
+./org/apache/spark/log4j-defaults.properties
+
+修改log4j-defaults.properties中的info级别为WARN即可
+
+然后再打包
+
+jar cvf spark-core_2.12-2.4.5.jar ./org/* ./META-INF/* about.html jetty-dir.css spark-version-info.properties 
+
+运行看看是不是一下子很简洁了
+————————————————
+版权声明：本文为CSDN博主「回到未来望过去」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/viviliving/java/article/details/83089845

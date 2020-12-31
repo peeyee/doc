@@ -1,6 +1,0 @@
-new project—>maven—>create from archetype—>add archetype
-
-填入模板的gav
-- g：net.alchim31.maven
-- a: scala-archetype-simple
-- v: 1.5
