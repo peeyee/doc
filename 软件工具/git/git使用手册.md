@@ -27,7 +27,7 @@ working area，是进行代码编辑的地方。
 
 是保存已提交代码的地方。
 
-## 安装
+## 1 安装
 
 ```shell
 $ sudo apt install git-all
@@ -52,7 +52,7 @@ git init
 
 对目录进行初始化，使得git托管这里面的数据。
 
-## 提交代码
+## 2 提交
 
 1. git add
 
@@ -85,124 +85,219 @@ $ cat .gitignore
 
 ```shell
 git commit -a -m "a commit" 
+git commit --amend # 修改上一个提交的信息
+```
 
+## 3 分支
+
+### 3.1 git branch
+
+分支是git的核心特性。
+
+```shell
+# 创建分支
+git branch bugFix 
+git checkout bugFix 
+git checkout -b bugFix  # 创建并切换分支
+
+# 查询分支
+git branch
+git branch -v # 显示详细信息
+```
+
+### 3.2 git merge
+2.1 merge
+
+将两个分支融合成一个新的提交点，这个提交点有双亲。
+
+   ```shell
+   $ git merge test
+   Merge made by the 'recursive' strategy.
+    a.txt | 0
+    1 file changed, 0 insertions(+), 0 deletions(-)
+    create mode 100644 a.txt
+   ```
+
+2.2 冲突处理
+
+当两个分支同时改动一个文件，merge时，会产生冲突。
+
+```shell
+$ git merge test
+自动合并 a.txt
+冲突（内容）：合并冲突于 a.txt
+自动合并失败，修正冲突然后提交修正的结果。
+
+$ git status
+位于分支 master
+您的分支领先 'origin/master' 共 10 个提交。
+  （使用 "git push" 来发布您的本地提交）
+
+您有尚未合并的路径。
+  （解决冲突并运行 "git commit"）
+  （使用 "git merge --abort" 终止合并）
+
+未合并的路径：
+  （使用 "git add <文件>..." 标记解决方案）
+
+	双方修改：   a.txt
+
+修改尚未加入提交（使用 "git add" 和/或 "git commit -a"）
+
+$ cat a.txt
+<<<<<<< HEAD
+line1 add by master
+=======
+
+line2 add by branch test.
+>>>>>>> test
+```
+
+说明：
+
+以=======为分界，<<<<<<< HEAD为你当前所在分支，>>>>>>> test为要合并分支的相应内容。根据实际情况，合并代码，去除<<<<< ===== >>>>>这些标记，然后提交代码，冲突处理完毕。
+
+```shell
+$ vi a.txt
+
+# 代码合并如下
+$ cat a.txt 
+line1 add by master
+line2 add by branch test.
+
+$ git add . && git commit -a
+
+# 终止merge
+# 无法处理好冲突时，可以终止merge
+$ git merge --abort
 ```
 
 
 
-1. 
-2. git commit
-  git commit --amend
-3. git branch
-  git branch bugFix --创建分支
-  git checkout bugFix -- 切换到bugFix分支
-4. git merge
-  融合，将两个分支融合成一个新的提交点。这个提交点有两个双亲。
-
-
-
-4.git rebase
-rebase不会引入新的提交点，使开发历史更线性。
-rebase 意为以某个commit为基准，把当前分支合并上去。
-git rebase -i（交互模式） HEAD^ -- 整理上一个提交
-pick 取
-omit 舍弃
+### 3.3 git rebase
+   rebase不会引入新的提交点，使开发历史更线性。
+   rebase 意为以某个commit为基准，把当前分支合并上去。
+   git rebase -i（交互模式） HEAD^ -- 整理上一个提交
+   pick 取
+   omit 舍弃
 
 设当前分支为bugFix
 git rebase master 
 
-5 git 引用
-HEAD 指向当前分支头部
-^ 向上移动一格
-~n,向前移动n格
+## 4 tag
 
-git branch -f master HEAD~3 --强制master分支指向head的前3个提交点。
+相比于随意移动的分支，标签是一个固定的版本锚，标识了某个固定的位置，常用于标记稳定的发行版本。
 
+```shell
+# -a 创建
+$ git tag -a "v1.0" cd95b7 -m "stable version"
+# -d 删除
+$ git tag -d test
+```
 
+## 5 git ref
+git引用，HEAD 指向当前分支头部：
+   ^ ，向前移动一格
+   ~n，向前移动n格
+
+```shell
+# 强制master分支指向head的前3个提交点。
+git branch -f master HEAD~3 --
 cat .git/HEAD
+```
+
+## 6 log
+git log，查看提交历史。
 
 
-6 git log
-查看提交历史
+## 7 reset 
+反悔1，git reset 通过将分支回撤几个提交来取消更改。
 
+```shell
+# 回退到上一个提交点。
+git reset HEAD^1 
 
-7. git reset -- 反悔1
-git reset 通过将分支回撤几个提交来取消更改。
-git reset HEAD^1 -- 将当前分支回退到上一个提交点。
+# 取消index区的a.txt文件，相应于undo add
+git reset HEAD a.txt
 
-8. git revert -- 反悔2，reset是自己玩，revert可以分享给别人。
+# 从版本区检出某个文件，会覆盖工作区
+git checkout -- Rakefile
+
+```
+
+reset有三种模式：
+
+* soft
+
+只改变版本区。
+
+```shell
+git reset --soft HEAD～
+```
+
+上述命令运行后，工作区和暂存区并未改变。
+
+* mixed
+
+mixed是reset的默认模式，在soft的基础上，继续回退暂存区，让暂存区和版本区一致，相当于undo add。
+
+* hard
+
+在mixed的基础上，继续回退工作区。这是一个**危险**的动作，因为会覆盖你已经修改的文件。如果你未曾提交过此数据的话，意味着这次覆盖是不可恢复的。
+
+## 8 revert
+
+反悔2，reset是自己玩，revert可以分享给别人。
 git revert 会通过引入一个新的提交点的方式回退至指定点。
 git revert 之后可以推送至远程仓库，分享“回退”。
 
+## 9 git remote
 
-9 git cherry-pick
-用于整理提交记录。
-git cherry-pick 提交号
+git可以让本地和远程分支保持联系，并共享变更。
 
+### 9.1 git clone
 
-10 git tag
-标签，相比于随意移动的分支，是一个比较固定的版本锚，标识了某个固定的位置。常用于标记固定的版本。
-git tag <tag_name> <commit>
-
-11.git describe
-用法： git describe <ref>某个提交的引用或者hash值 ，用于查找当前分支最近的标签，以及和它的差距。
-输出格式：<tag>_<numCommits>_g<hash>
-
-================================
-
-====git 远程提交======
-
-1.git clone
 git clone <url>
 拷贝远程的代码。远程分支的命名规格:<remote>/<local>.
 
+### 9.2 git fetch
+git fetch <url>获取与远程仓库的差异代码。
 
-2.git fetch
-git fetch http://|git:// xxx.获取与远程仓库的差异代码。
+**注意**
+git fetch 是单纯的下载操作，并不会改变你本地仓库的状态。它不会更新你的 master 分支，也不会修改你磁盘上的件。
 
-*****注意*********
-git fetch 不会做的事
-git fetch 并不会改变你本地仓库的状态。它不会更新你的 master 分支，也不会修改你磁盘上的文件。
-
-理解这一点很重要，因为许多开发人员误以为执行了 git fetch 以后，他们本地仓库就与远程仓库同步了。它可能已经将进行这一操作所需的所有数据都下载了下来，
-但是并没有修改你本地的文件。
-
-所以, 你可以将 git fetch 的理解为单纯的下载操作
-
-3.git pull
+### 9.3 git pull
 拉取并融合远程仓库的分支
-
 git pull == git fetch && git merge
 git pull --rebase,可以先获取并合并远程的改动，并提交本地分支的commit
 
-4.git push
--
+### 9.4 git push
+提交当前分支的改动至远程分支。
 
 
 
+## 10 其他
+
+* cherry-pick
+
+* git describe
+  用法： git describe <ref>某个提交的引用或者hash值 ，用于查找当前分支最近的标签，以及和它的差距。
+  输出格式：<tag>_<numCommits>_g<hash>
 
 
 
+# 中文设置
 
-
-
-# 中文乱码设置
-
-git config --global core.quotepath false   # core.quotepath设为false的话，就不会对0x80以上的字符进行quote。中文显示正常。
-
-git config --global gui.encoding utf-8  图形界面编码
-
-git config --global i18n.commit.encoding utf-8  提交信息编码
-
-git config --global i18n.logoutputencoding utf-8  输出 log 编码
-
-1git status
-查看当前分支工作区的情况，包括与远程分支的差异情况。
-git status
-位于分支 数据仓库
-您的分支与上游分支 'origin/数据仓库' 一致。
-
-无文件要提交，干净的工作区
+```shell
+# 显示中文
+git config --global core.quotepath false   
+# 图形界面编码 
+git config --global gui.encoding utf-8  
+# 提交信息编码
+git config --global i18n.commit.encoding utf-8 
+# 输出 log 编码
+git config --global i18n.logoutputencoding utf-8  
+```
 
 
 # 设置gitignore
@@ -210,12 +305,17 @@ git status
 
 vi .gitignore
 
-# 忽略word的临时文件
-.~*
+```shell
+# 忽略以下文件
+.~* # word的临时文件
+/target # target目录
+/**/target # 所有的target目录
+*.[oa] # 以o或者a结尾的文件
+```
 
 配置语法：
 以斜杠“/”开头表示目录；
 以星号“*”通配多个字符；
-以问号“?”通配单个字符
+以问号“?”通配单个字符；
 以方括号“[]”包含单个字符的匹配列表；
 以叹号“!”表示不忽略(跟踪)匹配到的文件或目录；
