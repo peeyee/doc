@@ -109,3 +109,30 @@ Markdown支持两种样式的链接：内联和引用。
 
 
 
+# 高级用法
+
+## 公式
+
+当你需要在编辑器中插入数学公式时，可以使用两个美元符 $$ 包裹 TeX 或 LaTeX 格式的数学公式来实现。提交后，问答和文章页会根据需要加载 Mathjax 对数学公式进行渲染。如：
+
+```
+$$
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix} 
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+\frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
+\end{vmatrix}
+${step1}{\style{visibility:hidden}{(x+1)(x+1)}}
+$$
+```
+
+$$
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix} 
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+\frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
+\end{vmatrix}
+${step1}{\style{visibility:hidden}{(x+1)(x+1)}}
+$$
+
+## 流程图

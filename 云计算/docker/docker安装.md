@@ -54,28 +54,17 @@ mkdir -p /etc/docker
 
 ```shell
 vi /etc/docker/daemon.json 
-
 {"registry-mirrors": ["https://a14c78qe.mirror.aliyuncs.com"],
-
 "log-driver": "json-file",
-
-  "log-opts": {
-
-​    "max-size": "100m",
-
-​    "max-file": "5"
-
-  },
-
+    "log-opts": {
+        "max-size": "100m",
+        "max-file": "5"
+    },
 "live-restore": false,
-
 "insecure-registries": [
-
-​	"reg.pinming.org"
-
+	"reg.pinming.org"
  ]
-
-} 
+}
 ```
 
 4. 修改docker启动服务 
@@ -87,20 +76,15 @@ vi /etc/systemd/system/docker.service.d/override.conf
 
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd --graph=/app/docker -H 0.0.0.0:2375 -H unix:///var/run/docker.sock $DOCKER_NETWORK_OPTIONS
+ExecStart=/usr/bin/dockerd --data-root=/app/docker -H 0.0.0.0:2375 -H unix:///var/run/docker.sock $DOCKER_NETWORK_OPTIONS
 ```
-
- 
 
 5. docker启动
 
 ```shell
 systemctl daemon-reload &&\
-
 systemctl enable docker &&\
-
 systemctl start docker &&\
-
 systemctl status docker
 ```
 
