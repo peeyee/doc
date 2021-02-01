@@ -18,14 +18,14 @@ $ setenforce 0
 ```shell
 docker pull mysql:8.0
 
-docker run --name=mysql8.0 -e MYSQL_ROOT_PASSWORD=root -p 3308:3306 -v /alidata/mysql8:/var/lib/mysql -d mysql:8.0 
+docker run --name=mysql8.0 -e MYSQL_ROOT_PASSWORD=root -p 3308:3306 -v /alidata/mysql8:/var/lib/mysql  -v /alidata/etc/my.cnf:/etc/mysql/my.cnf  -d mysql:8.0 
 ```
 
 # 3.初始化root远程账号
 
 ```shell
 docker exec -it mysql1 mysql -uroot -p
-ALTER USER 'root'@'%' IDENTIFIED BY 'password';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
 flush privileges;
 ```
 
@@ -44,5 +44,6 @@ flush privileges;
 ```shell
 max-connections=300
 default-time_zone='+8:00'
+lower_case_table_names = 1
 ```
 
