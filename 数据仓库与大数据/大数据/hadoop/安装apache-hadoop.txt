@@ -1,7 +1,9 @@
 0.安装前准备
 参考文档 http://hadoop.apache.org/docs/r1.0.4/cn/cluster_setup.html
 0.1 关闭防火墙
-service iptables statu2.SSH配置免密
+service iptables status
+
+2.SSH配置免密
 0.2 关闭Selinux
 很多稀奇古怪的问题都是SELINUX导致的。
 

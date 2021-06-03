@@ -1,23 +1,28 @@
-1. 安装依赖
+# swagger
+
+## maven依赖
+```xml
 <!-- Swagger2 Begin -->
 <dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>2.9.2</version>
+ <groupId>io.springfox</groupId>
+ <artifactId>springfox-swagger2</artifactId>
+ <version>2.9.2</version>
 </dependency>
 <dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger-ui</artifactId>
-    <version>2.9.2</version>
+ <groupId>io.springfox</groupId>
+ <artifactId>springfox-swagger-ui</artifactId>
+ <version>2.9.2</version>
 </dependency>
 <!-- Swagger2 End -->
+```
 
-2. 配置swagger
+## 配置swagger
 
-注意：RequestHandlerSelectors.basePackage("com.funtl.myshop.service") 为 Controller 包路径，不然生成的文档扫描不到接口
+
 
 创建一个名为 Swagger2Configuration 的 Java 配置类，代码如下：
 
+```java
 @Configuration
 @EnableSwagger2 //启用 Swagger2
 public class Swagger2Configuration {
@@ -39,14 +44,16 @@ public class Swagger2Configuration {
                 .version("1.0.0")
                 .build();
     }
+
 }
+```
 
+注意：basePackage("com.funtl.myshop.service") 为 Controller 包路径，不然生成的文档扫描不到接口。
 
-3.访问api
+## 访问swagger
 http://localhost:8001/swagger-ui.html#/
 
-
-4.配置注解
+## 配置注解
 
 Swagger 常用注解说明
 Swagger 通过注解表明该接口会生成文档，包括接口名、请求方法、参数、返回信息的等等。
@@ -64,11 +71,6 @@ Swagger 通过注解表明该接口会生成文档，包括接口名、请求方
 @ApiImplicitParam：一个请求参数
 @ApiImplicitParams：多个请求参数
 
-作者：撸帝
-链接：https://www.jianshu.com/p/3c9986f81ff0
-来源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 @ApiModel
 使用场景：在实体类上边使用，标记类时swagger的解析类。
 概述：提供有关swagger模型的其它信息，类将在操作中用作类型时自动内省。
@@ -76,5 +78,4 @@ Swagger 通过注解表明该接口会生成文档，包括接口名、请求方
 @ApiModelProperty
 使用场景：使用在被 @ApiModel 注解的模型类的属性上。表示对model属性的说明或者数据操作更改 。
 概述：添加和操作模型属性的数据。
-
 

@@ -1,0 +1,17 @@
+Python小技巧之pip国内镜像设置
+国内镜像列表
+豆瓣： http://pypi.doubanio.com/simple/
+清华： https://pypi.tuna.tsinghua.edu.cn/simple
+科大： https://mirrors.ustc.edu.cn/pypi/web/simple/
+择一即可。
+
+
+
+一、修改配置文件
+1. 修改~/pip/pip.ini文件
+[global]
+index-url = https://mirrors.ustc.edu.cn/pypi/web/simple/
+
+二、单次使用
+直接在 pip install xxx 后加上 -i 镜像源 即可，如：
+pip install flask -i http://pypi.douban.com/simple
