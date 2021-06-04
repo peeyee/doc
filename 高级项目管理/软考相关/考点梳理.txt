@@ -1,4 +1,4 @@
-1.计算题
+﻿1.计算题
     1.1 一个是挣值计算。
   
 	PV、EV、AC、BAC、EAC、ETC等计算公式含义
@@ -16,7 +16,8 @@
 	ETC estimate to complete：完工尚需估算：剩余工作在当前的估算是多少？（截止目前，剩余工作到完工时，需要花费的成本预算）
 	————————————————
 
-
+        CV = EV - AC 成本偏差
+	SV = EV - PV 进度偏差  
 	CPI = EV / AC  cpi>1 代表成本低
 	SPI = EV / PV  spi>1 进度快
 
