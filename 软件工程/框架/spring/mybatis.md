@@ -4,11 +4,11 @@
 ```xml
 <properties resource="db.properties" />
     <settings>
-        <setting name="logImpl" value="LOG4J" />
-        <!--将sql语句输出到控制台-->
+       <setting name="logImpl" value="LOG4J" />
+       <!--将sql语句输出到控制台-->
        <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
-
+</properties>
 ```
 
 ## resultMap
