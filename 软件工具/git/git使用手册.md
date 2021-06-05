@@ -331,3 +331,8 @@ github是一个internet的代码仓库，提供代码托管和多人项目协作
 
 [hello-world](https://guides.github.com/activities/hello-world/)项目来熟悉github的相关操作。
 
+# 常见问题
+
+* SSL certificate problem: unable to get local issuer certificate
+
+ssl证书问题，解决方案，`git config --global http.sslVerify "false"`，停止服务器身份校验。
