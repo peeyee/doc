@@ -18,7 +18,7 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.5</version>
 		</dependency>
-	</dependencies>
+</dependencies>
 ```
 ## demo代码
 
@@ -41,7 +41,7 @@ ERROR StatusLogger No log4j2 configuration file found. Using default configurati
 
 ## 配置log4j2
 
-添加log4j2.xml，添加到resource目录即可
+添加log4j2.xml，添加到resources目录即可
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
