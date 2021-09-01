@@ -104,6 +104,20 @@ $ sudo docker run hello-world
 [root@pminfo182 ~]# docker images
 REPOSITORY         TAG          IMAGE ID       CREATED        SIZE
 python             latest       da24d18bf4bf   5 weeks ago    885MB
+
+# 清理None镜像
+[root@pminfo182 ~]# docker image prune
+WARNING! This will remove all dangling images.
+Are you sure you want to continue? [y/N] y
+Total reclaimed space: 0B
+
+# 清理无容器使用的镜像
+[root@pminfo182 ~]# docker image prune -a
+WARNING! This will remove all images without at least one container associated to them.
+Are you sure you want to continue? [y/N] y
+.......
+Total reclaimed space: 696.6MB
+
 ```
 
 ### docker pull

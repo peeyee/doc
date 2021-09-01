@@ -258,6 +258,12 @@ git可以让本地和远程分支保持联系，并共享变更。
 ```shell
 # 跟踪远程master分支(最新的默认分支是main)
 git remote add -t master -m master origin https://github.com/peeyee/algorithm.git
+
+# 跟踪远程分支
+git branch --set-upstream-to=origin/main_hebi main_hebi
+
+# 删除远程分支
+git push origin --delete serverfix
 ```
 
 ### 9.1 git clone
