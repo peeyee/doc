@@ -38,8 +38,8 @@ $ git --version
 
 ```shell
 git config --global core.editor=vi
-git config --global user.name=peter
-git config --global user.email=yeyoung0909@163.com
+git config --global user.name peter
+git config --global user.email yeyoung0909@163.com
 # 列出配置
 git config --list
 ```
