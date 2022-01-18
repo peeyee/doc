@@ -2,9 +2,10 @@
 
 ## 下载jdk
 
-[oracle官方网址](https://www.oracle.com/cn/java/technologies/javase-downloads.html)
+[oracle官方网址](https://www.oracle.com/cn/java/technologies/javase-downloads.html)   yeyoung0909@163.com/
 
 ```shell
+wget -c https://download.oracle.com/otn/java/jdk/8u291-b10/d7fc238d0cbf4b0dac67be84580cfb4b/jdk-8u291-linux-x64.rpm
 tar -zxvf jdk-8u281-linux-x64.tar.gz -C /opt
 mv /opt/jdk1.8.0_281/ /opt/jdk
 ```

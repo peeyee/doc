@@ -103,6 +103,15 @@ git checkout -b bugFix  # 创建并切换分支
 # 查询分支
 git branch
 git branch -v # 显示详细信息
+
+# 重命名分支
+ git branch -m oldName  newName
+ 
+# 推送分支
+git push origin newName
+
+# 删除远程分支
+git push --delete origin oldName
 ```
 
 ### 3.2 git merge

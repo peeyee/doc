@@ -23,3 +23,12 @@ PageHelper.startPage(pageNum,pageSize);
     <artifactId>pagehelper-spring-boot-starter</artifactId>
     <version>1.2.10</version>
 </dependency>
+
+
+3. test不满足预期
+mybatis 中 if-test 判断大坑
+【<if test="takeWay == '0'">】mybatis的if判断
+
+单个的字符要写到双引号里面才行，改为<if test='takeWay == "1"'>或者改为<if test="takeWay == '1'.toString() ">
+
+.xml文件的部分代码

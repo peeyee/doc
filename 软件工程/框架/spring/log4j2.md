@@ -158,7 +158,7 @@ additivity="false"表示在该logger中输出的日志不会再延伸到父层lo
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="mylog" level="trace" additivity="true">
+		<Logger name="com.demo.ClassName" level="trace" additivity="true">
 			<AppenderRef ref="MyFile" />
 		</Logger>
 		<Root level="error">
@@ -199,7 +199,7 @@ Rolling的意思是当满足一定条件后，就重命名原日志文件用于�
 	</Appenders>
 
 	<Loggers>
-		<Logger name="mylog" level="trace" additivity="false">
+		<Logger name="com.demo.ClassName" level="trace" additivity="false">
 			<AppenderRef ref="MyFile" />
 		</Logger>
 		<Root level="error">
