@@ -109,9 +109,34 @@ wget https://dl.grafana.com/enterprise/release/grafana-enterprise-8.5.0.linux-am
 tar -zxvf grafana-enterprise-8.5.0.linux-amd64.tar.gz
 ```
 
+### 1.2.2 启动
 
+```shell
+nohup ./bin/grafana-server web > grafana.log 2>&1 &
+```
 
+默认用户是admin/admin。
 
+###  1.2.3 配置
+
+* datasource
+
+configration->datasource中添加promethus数据源，根据需求修改Scrape interval，Query timeout。
+
+### 1.2.4 导入dashboard
+
+在grafana官网中，product-> dashboard，可以找到共享的dashboard。
+
+https://grafana.com/grafana/dashboards/
+
+* *Node Exporter Full*
+
+一个全面的机器监控面板，包含cpu，内存，网络等。
+
+https://grafana.com/api/dashboards/1860/revisions/26/download
+
+1. dashboard->import，导入下载的json
+2. 设定promethus数据源，点击import完成导入。
 
 
 
@@ -119,3 +144,4 @@ tar -zxvf grafana-enterprise-8.5.0.linux-amd64.tar.gz
 
 * https://grafana.com/
 * https://prometheus.io/docs/introduction/overview/
+* https://grafana.com/grafana/dashboards/
