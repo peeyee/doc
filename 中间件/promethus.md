@@ -129,19 +129,68 @@ configration->datasource中添加promethus数据源，根据需求修改Scrape i
 
 https://grafana.com/grafana/dashboards/
 
-* *Node Exporter Full*
+* *Node Exporter*
 
 一个全面的机器监控面板，包含cpu，内存，网络等。
 
-https://grafana.com/api/dashboards/1860/revisions/26/download
+https://grafana.com/api/dashboards/15172/revisions/6/download
 
 1. dashboard->import，导入下载的json
 2. 设定promethus数据源，点击import完成导入。
+
+## 1.3 安装loki
+
+loki是一款开源的日志管理软件，轻量、高效，与grafana集成良好。并且支持强大的LogQL，使得日志的查找与分析的效率大大提升。
+
+### 1.3.1 docker安装
+
+需要安装两个组件：loki server，promtail。promtail是一个拉取日志的组件，需要安装在日志文件所在服务器。
+
+```shell
+#loki
+wget https://raw.githubusercontent.com/grafana/loki/v2.5.0/cmd/loki/loki-local-config.yaml -O loki-config.yaml
+docker run --name loki -d -v $(pwd):/mnt/config -p 3100:3100 grafana/loki:2.5.0 -config.file=/mnt/config/loki-config.yaml
+
+#promtail
+wget https://raw.githubusercontent.com/grafana/loki/v2.5.0/clients/cmd/promtail/promtail-docker-config.yaml -O promtail-config.yaml
+
+```
+
+### 1.3.2 配置promtail
+
+配置promtail抓取日志文件，并将
+
+```shell
+[root@node1 data]# vi promtail-config.yaml
+- job_name: dolphinDB
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: dolphinDB
+      __path__: /dolphinDB/log
+```
+
+启动promtail：
+
+```shell
+docker run --name promtail -d -v $(pwd):/mnt/config -v /data/dolphinDB/server/clusterDemo/log:/dolphinDB/log --link loki grafana/promtail:2.5.0 -config.file=/mnt/config/promtail-config.yaml
+```
+
+
+
+### 1.3.3 与grafana集成
+
+configuration->datasource，增加loki数据源，`save and test`测试成功即可。
+
+
 
 
 
 # 参考资料
 
-* https://grafana.com/
 * https://prometheus.io/docs/introduction/overview/
 * https://grafana.com/grafana/dashboards/
+* https://grafana.com/docs/grafana/latest/datasources/prometheus/
+* https://grafana.com/docs/loki/latest/installation/
+
