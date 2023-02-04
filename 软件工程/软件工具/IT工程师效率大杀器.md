@@ -34,3 +34,13 @@ https://www.tiobe.com/tiobe-index/
 * 数据库排行
 
 https://db-engines.com/en/ranking
+
+* Stack Overflow
+
+https://stackoverflow.com/
+
+编程help网站。
+
+* redhat
+
+redhat知识库 https://access.redhat.com/
