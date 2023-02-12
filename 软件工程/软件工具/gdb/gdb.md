@@ -2,8 +2,6 @@
 
 gdb， gun project debugger, 用于调试c/c++的工具。
 
-
-
 # eample1
 
 通过 example1.cpp 来学习使用gdb来调试。
@@ -26,8 +24,6 @@ g++ -g example1.cpp -o example1
 ```
 
 **-g**选项可以生成供gdb调试的信息。
-
-
 
 ## 1 运行gdb
 
@@ -63,8 +59,6 @@ awatch -- Set a watchpoint for an expression
 break -- Set breakpoint at specified line or function
 ```
 
-
-
 ## 3 简单调试
 
 首先我们跑下example1。
@@ -91,7 +85,8 @@ Hello there
 ```shell
 (gdb) break mainq
 Breakpoint 1 at 0x4007e1
-(gdb) runStarting program: /data/example1 
+(gdb) run
+Starting program: /data/example1 
 
 Breakpoint 1, main () at example1.cpp:3
 3          int j = 3;1
@@ -144,7 +139,6 @@ A debugging session is active.
         Inferior 1 [process 27139] will be killed.
 
 Quit anyway? (y or n) y
-
 ```
 
 # eample2
@@ -160,14 +154,13 @@ int * f2(int *);
 
 int main(){
    int i = 3;
-   int * j = f1(&i);
-   int * p = f2(j);
-   crash(p);
-   
+   f1(&i);
 }
 
 int * f1(int * x){
-   return x;
+   int * j = f2(x);
+   crash(j);
+   return j;
 }
 
 int * f2(int * x){
@@ -177,6 +170,7 @@ int * f2(int * x){
 void crash(int * i){
    * i = 1;
 }
+
 ```
 
 example2依次调用3个函数，其中一个函数返回了空指针，导致程序segment fault。
@@ -193,23 +187,53 @@ Program received signal SIGSEGV, Segmentation fault.
 
 * down
 
-down -- Select and print stack frame called by this one
+down -- Select and print stack frame called by this one，找被当前函数调用的函数。
 
 * up
 
-up -- Select and print stack frame that called this one
+up -- Select and print stack frame that called this one，找调用当前函数的函数
 
 ```shell
 (gdb) up
 #1  0x0000000000400688 in main () at example2.cpp:11
 11         crash(p);
+(gdb) up
+#1  0x0000000000400697 in f1 (x=0x7fffffffe4ac) at example2.cpp:14
+14         crash(j);
+(gdb) up
+#2  0x0000000000400668 in main () at example2.cpp:9
+9          f1(&i);
+```
+
+### display
+
+如果想一直跟踪一个值可以使用display。取消跟踪使用undisplay。undisplay <i>，i为跟踪变量的id。
+
+
+
+## watch
+
+如果想追踪一个变量其值何时改变。可以使用watch，gdb会在变量发生变化时通知，并stop。
+
+## info
+
+info用于查看一些信息，比如断点。
+
+```shell
+(gdb) info breakpoints
+Num     Type           Disp Enb Address            What
+3       hw watchpoint  keep y                      i
 
 ```
 
+## delete
 
+删除断点
+
+delete [id]
+
+id为对应断点的编号，如果不加id，则会提示是否删除所有断点。
 
 8 附录
 
 * 
-
-

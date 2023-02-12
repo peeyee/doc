@@ -1,0 +1,5 @@
+1. vscode cpp环境安装
+https://zhuanlan.zhihu.com/p/87864677/
+
+2. windows vscode环境安装视频
+【手把手教会VSCode的C++环境搭建，多文件编译，Cmake，json调试配置（ Windows篇）】 https://www.bilibili.com/video/BV13K411M78v/?share_source=copy_web&vd_source=665b6620e76b4ff8c1f2685664107dc8
